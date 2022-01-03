@@ -1,0 +1,15 @@
+[Unit]
+Description="Livepeer transcoder service that automatically connects to local orchestrator."
+After=network.target
+PartOf=transcoder.target
+
+[Service]
+User=<username>
+Group=<same as username if applicable>
+Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
+ExecStart= /usr/local/bin/livepeer/livepeer.sh
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
