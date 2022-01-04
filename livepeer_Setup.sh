@@ -65,3 +65,9 @@ sudo cp livepeer.service /etc/systemd/system/
 #sudo systemctl enable livepeer.service
 #sudo systemctl enable orchestrator.target
 #sudo systemctl status prometheus.service
+
+
+#Cleanup
+cd $HOME
+
+rm livepeer-linux-amd64.tar.gz orchestrator.target  prometheus-2.32.1.linux-amd64.tar.gz prometheus.service livepeer livepeer.service livepeer.sh prometheus prometheus.service prometheus.yml -r
