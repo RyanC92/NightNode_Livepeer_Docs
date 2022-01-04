@@ -23,7 +23,7 @@ mv prometheus-2.32.1.linux-amd64 prometheus
 
 #Create Prometheus user account, copy the yml file, setup the service and take ownership.
 sudo useradd --no-create-home --shell /bin/false prometheus
-sudo useradd --no-create-home --shell /bin/false l
+sudo useradd --no-create-home --shell /bin/false livepeer
 sudo mkdir -p /etc/prometheus/
 sudo cp prometheus.yml /etc/prometheus/
 sudo cp prometheus /usr/local/bin/ -r
