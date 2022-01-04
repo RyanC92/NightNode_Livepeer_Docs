@@ -31,9 +31,9 @@ sudo chown -R prometheus:prometheus /etc/prometheus/
 sudo cp prometheus.service /etc/systemd/system/
 
 #setup the services for Prometheus
-sudo systemctl daemon-reload
-sudo systemctl start prometheus.service
-sudo systemctl enable prometheus.service
+#sudo systemctl daemon-reload
+#sudo systemctl start prometheus.service
+#sudo systemctl enable prometheus.service
 #sudo systemctl status prometheus.service
 
 #Download and install grafana
@@ -44,9 +44,9 @@ sudo apt-get update -y
 sudo apt-get install grafana-enterprise -y
 
 #Start the grafana server with systemd
-sudo systemctl daemon-reload
-sudo systemctl start grafana-server
-sudo systemctl enable grafana-server.service
+#sudo systemctl daemon-reload
+#sudo systemctl start grafana-server
+#sudo systemctl enable grafana-server.service
 #sudo systemctl status grafana-server
 
 #Install Livepeer
@@ -60,8 +60,8 @@ sudo cp livepeer.service /etc/systemd/system/
 
 
 #setup the services for livepeer
-sudo systemctl daemon-reload
-sudo systemctl start livepeer.service
-sudo systemctl enable livepeer.service
-sudo systemctl enable orchestrator.target
+#sudo systemctl daemon-reload
+#sudo systemctl start livepeer.service
+#sudo systemctl enable livepeer.service
+#sudo systemctl enable orchestrator.target
 #sudo systemctl status prometheus.service
