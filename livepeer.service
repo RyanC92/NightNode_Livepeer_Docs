@@ -10,6 +10,22 @@ Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
 ExecStart= /usr/local/bin/livepeer/livepeer.sh
 Restart=on-failure
 RestartSec=5s
+ProtectHome=yes
+ProtectClock=yes
+PrivateDevices=yes
+ProtectHostname=yes
+NoNewPrivileges=yes
+ProtectSystem=strict
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+ProtectKernelLogs=yes
+RestrictNamespaces=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ProtectKernelTunables=yes
+SystemCallErrorNumber=EPERM
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
 
 [Install]
 WantedBy=multi-user.target
