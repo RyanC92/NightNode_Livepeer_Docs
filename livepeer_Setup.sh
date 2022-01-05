@@ -57,6 +57,7 @@ mv livepeer-linux-amd64 livepeer
 sudo cp livepeer /usr/local/bin/
 sudo cp livepeer.sh /usr/local/bin/livepeer/
 sudo cp livepeer.service /etc/systemd/system/
+sudo cp orchestrator.target /etc/systemd/system
 
 
 #setup the services for livepeer
