@@ -21,6 +21,9 @@ tar -xvzf prometheus-2.32.1.linux-amd64.tar.gz
 # this is to rename it if you want.
 mv prometheus-2.32.1.linux-amd64 prometheus
 
+#check for updates and install sudo
+apt-get update && apt-get -y install sudo
+
 #Create Prometheus user account, copy the yml file, setup the service and take ownership.
 sudo useradd --no-create-home --shell /bin/false prometheus
 sudo useradd --no-create-home --shell /bin/false livepeer
@@ -55,7 +58,7 @@ tar -xvzf livepeer-linux-amd64.tar.gz
 # this is to rename it if you want.
 mv livepeer-linux-amd64 livepeer
 
-sudo cp livepeer /usr/local/bin/
+sudo cp livepeer /usr/local/bin/ -r
 sudo cp livepeer.sh /usr/local/bin/livepeer/
 sudo cp livepeer.service /etc/systemd/system/
 sudo cp orchestrator.target /etc/systemd/system
