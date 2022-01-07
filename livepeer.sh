@@ -15,6 +15,7 @@ CLI_ADDR="<If you want to change your CLIADDR>"
     -ethPassword <Example: /usr/local/bin/livepeer/pwd.txt> \
     -ethKeystorePath <Example: ~/.lpData/mainnet/keystore/> \
     -orchestrator \
+#   -transcoder  \ #uncomment the line if you want to run and O/T 
     -cliAddr $CLI_ADDR \
     -orchSecret <Example: /usr/local/bin/livepeer/secret.txt> \
     -pricePerUnit $PRICE_PER_UNIT \
