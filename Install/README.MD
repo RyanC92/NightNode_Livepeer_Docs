@@ -40,21 +40,41 @@ By default the script will utilize the directories
 
 # Modifications
 
-### livepeer_orchestrator.conf
+
+### livepeer_orchestrator.conf (For standalone orchestrators or orchestrator/transcoder combos without separate instances)
 
 ```
-<orchestrator|transcoder|both(separate lines)>
+<orchestrator|transcoder|both(put orchestrator and transcoder by themselves on separate lines)>
 ethUrl <infura|geth|alchemy url>
 orchSecret <path to file|string password>
 ethPassword <path to file|string password>
-ethKeystorePath <path to file>
 serviceAddr <orchestrator url or ip>
 maxGasPrice <maximum gas price to redeem a wining ticket, denoted in gwei. Example: 60 Gwei is denoted by 60000000000>
 pricePerUnit <usually set between 800-1200>
 reward <true|false>
 maxSessions <#>
 nvidia <all|0,1,2,3 etc.>
-orchAddr <
 monitor 
-v 6
-autoAdjusPrice false
+v <1-6>
+autoAdjusPrice <true|false>
+```
+
+For Transcoders: 
+### livepeer_transcoder.conf (For standalone transcoders)
+
+```
+transcoder
+ethUrl <infura|geth|alchemy url>
+orchSecret <path to file|string password>
+ethPassword <path to file|string password>
+maxGasPrice <maximum gas price to redeem a wining ticket, denoted in gwei. Example: 60 Gwei is denoted by 60000000000>
+reward false
+maxSessions <#>
+orchAddr <orchestrator domain or IP:8935>
+nvidia <all|0,1,2,3 etc.>
+monitor 
+v <1-6>
+autoAdjusPrice <true|false>
+```
+
+#### Note: reward false is not technically needed if you're not an orchestrator. However, if you're using the transcoder on the same host as the orchestrator, theres a risk of the transcoder calling the reward without the flag set to false. 
