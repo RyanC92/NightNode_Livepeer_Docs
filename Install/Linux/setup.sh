@@ -9,10 +9,10 @@ apt-get update -y && apt-get install sudo  apt-transport-https software-properti
 #Download Prometheus, grafana and necessary dependencies
 
 wget https://github.com/prometheus/prometheus/releases/download/v2.32.1/prometheus-2.32.1.linux-amd64.tar.gz
-wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/prometheus.yml
-wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/livepeer.service
-wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/prometheus.service
-wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/orchestrator.target
+wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.yml
+wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer.service
+wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.yml
+wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/orchestrator.target
 wget https://github.com/livepeer/go-livepeer/releases/download/v0.5.23/livepeer-linux-amd64.tar.gz
 
 #Install Livepeer
@@ -20,9 +20,9 @@ tar -xvzf livepeer-linux-amd64.tar.gz
 # this is to rename it if you want.
 mv livepeer-linux-amd64 livepeer
 
-wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/livepeer_transcoder.conf
-wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/livepeer_orchestrator.conf
-wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/livepeer.sh
+wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestrator.conf
+wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_transcoder.conf
+wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer.sh
 
 #set livepeer.sh to execute
 chmod +x livepeer/livepeer.sh

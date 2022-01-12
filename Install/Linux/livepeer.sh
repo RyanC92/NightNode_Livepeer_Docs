@@ -1,5 +1,8 @@
 #! /bin/bash
 
+/usr/local/bin/livepeer -config livepeer_orchestrator.conf
+
+:<<'
 ETH_URL="<YourEthURL>"
 ETH_ACCT_ADDR="<YourETHADDR>"
 SERVICE_ADDR="<OrchestratorServiceURL>"
@@ -26,3 +29,4 @@ CLI_ADDR="<If you want to change your CLIADDR>"
     -reward=false \
     -autoAdjustPrice=false \
     -maxSessions=$MAX_SESSIONS
+'
