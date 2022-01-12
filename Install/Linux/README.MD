@@ -76,5 +76,8 @@ monitor
 v <1-6>
 autoAdjusPrice <true|false>
 ```
+Note: reward false is not technically needed if you're not an orchestrator. However, if you're using the transcoder on the same host as the orchestrator, theres a risk of the transcoder calling the reward without the flag set to false. 
 
-#### Note: reward false is not technically needed if you're not an orchestrator. However, if you're using the transcoder on the same host as the orchestrator, theres a risk of the transcoder calling the reward without the flag set to false. 
+### livepeer.sh (Modify to select your config file)
+
+In the /usr/local/bin/livepeer/ directory modify the ```livepeer.sh``` file to point the configuration file to either the ```livepeer_orchestrator.conf``` or the ```livepeer_orchestrator.conf``` file 
