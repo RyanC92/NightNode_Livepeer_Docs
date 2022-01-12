@@ -9,9 +9,9 @@ This article will use the GNOME desktop environment’s built-in Screen Sharing 
 The Vino VNC server might not be installed on your Ubuntu 20.04 LTS operating system by default. But it is available in the official package repository of Ubuntu 20.04 LTS. So, you can install it easily.
 
 First, update the APT package repository cache with the following command:
-
+```
 $ sudo apt update
-
+```
 ![image](https://user-images.githubusercontent.com/15055337/149156134-48228fce-cd92-4342-8d0b-42aee544f1e7.png)
 
 
@@ -20,9 +20,9 @@ The APT package repository cache should be updated.
 ![image](https://user-images.githubusercontent.com/15055337/149156152-f9c32b47-e5dc-4ab9-ab85-c60b5c26da4d.png)
 
 To install Vino, run the following command:
-
+```
 $ sudo apt install vino
-
+```
 ![image](https://user-images.githubusercontent.com/15055337/149156173-4ddb6613-7e24-474e-bc64-300420743f74.png)
 
 To confirm the installation, press Y and then press <Enter>.
@@ -79,9 +79,9 @@ Finding the IP Address of Your Computer:
 Once you have Screen Sharing enabled, the person who wants to connect to your computer remotely needs to know your computer’s IP address.
 
 You can find the IP address of your computer with the following command:
-
+```
 $ hostname -I
-
+```
   ![image](https://user-images.githubusercontent.com/15055337/149156578-1f72ec93-33d1-4df2-90a3-f5d92db84aa6.png)
 
 The IP address of my computer is 192.168.20.131. It will be different for you. So, make sure to replace it with yours from now on.
@@ -92,7 +92,7 @@ The IP address of my computer is 192.168.20.131. It will be different for you. S
   
  Final Steps:
   VNC may actively refuse the connection to your instance. If this is happening, run the following command (NOT AS SUDO)
-  
+  ```
   $ gsettings set org.gnome.Vino require-encryption false
-  
+  ```
   This should make VNC not require encryption to connect and it'll allow your VNC session. 
