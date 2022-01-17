@@ -26,7 +26,7 @@ wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/mai
 wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_transcoder.conf
 wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestratorcombo.conf
 
-sudo mv livepeer /usr/local/bin/ -r
+sudo mv livepeer /usr/local/bin/
 sudo mv livepeer.service /etc/systemd/system/
 sudo mv orchestrator.target /etc/systemd/system
 
@@ -40,7 +40,7 @@ sudo useradd --no-create-home --shell /bin/false prometheus
 sudo useradd --no-create-home --shell /bin/false livepeer
 sudo mkdir -p /etc/prometheus/
 sudo mv prometheus.yml /etc/prometheus/
-sudo mv prometheus /usr/local/bin/ -r
+sudo mv prometheus /usr/local/bin/
 sudo chown -R prometheus:prometheus /etc/prometheus/
 sudo mv prometheus.service /etc/systemd/system/
 
