@@ -2,14 +2,16 @@
 Description="Livepeer transcoder service that automatically connects to local orchestrator."
 After=network.target
 PartOf=transcoder.target
+StartLimitIntervalSec=0
 
 [Service]
-User=<username>
-Group=<same as username if applicable>
+User=root
+Group=root
 Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
+WorkingDirectory= /usr/local/bin/livepeer/
 ExecStart= /usr/local/bin/livepeer/livepeer -config <livepeer_orchestrator.conf|livepeer_orchestratorcombo.conf|livepeer_transcoder.conf>
 Restart=always
-RestartSec=5s
+RestartSec=3s
 ProtectHome=yes
 ProtectClock=yes
 PrivateDevices=yes
