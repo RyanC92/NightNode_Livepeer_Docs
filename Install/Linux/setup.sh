@@ -16,6 +16,7 @@ wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Lin
 wget https://github.com/livepeer/go-livepeer/releases/download/v0.5.25/livepeer-linux-amd64.tar.gz
 wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.service
 
+
 #Install Livepeer
 tar -xvzf livepeer-linux-amd64.tar.gz
 # this is to rename it if you want.
@@ -24,6 +25,7 @@ mv livepeer-linux-amd64 livepeer
 wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestrator.conf
 wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_transcoder.conf
 wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer.sh
+wget -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestratorcombo.conf
 
 #set livepeer.sh to execute
 chmod +x livepeer/livepeer.sh
@@ -55,4 +57,4 @@ sudo apt-get install grafana-enterprise -y
 #Cleanup
 cd $HOME
 
-rm livepeer-linux-amd64.tar.gz prometheus-2.32.1.linux-amd64.tar.gz prometheus.service -r
+rm livepeer-linux-amd64.tar.gz prometheus-2.32.1.linux-amd64.tar.gz prometheus.service setup.sh prometheus prometheus.yml livepeer.service orchestrator.target -r
