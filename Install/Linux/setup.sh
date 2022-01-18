@@ -2,6 +2,8 @@
 
 #move to home directory
 cd $HOME
+mkdir livepeersetup/
+cd livepeersetup/
 
 #install sudo (for minimal installs
 apt-get update -y && apt-get install sudo  apt-transport-https software-properties-common wget -N -C -y
@@ -52,5 +54,5 @@ sudo apt-get install grafana-enterprise -y
 
 #Cleanup
 cd $HOME
+rm $HOME/livepeersetup/ -r
 
-rm livepeer-linux-amd64.tar.gz prometheus-2.32.1.linux-amd64.tar.gz prometheus.service setup.sh prometheus prometheus.yml livepeer.service orchestrator.target -r
