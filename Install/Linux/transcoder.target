@@ -1,0 +1,6 @@
+[Unit]
+After=network.target
+Wants=livepeer.service transcoder.service prometheus.service
+
+[Install]
+WantedBy=multi-user.target
