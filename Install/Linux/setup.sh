@@ -36,6 +36,8 @@ mv /usr/local/bin/livepeer /usr/local/bin/livepeer.bak
 mv /usr/local/bin/prometheus /usr/local/bin/prometheus.bak
 
 #relocate livepeer and service files to their directories
+echo "relocating livepeer and service files"
+
 sudo mv livepeer /usr/local/bin/
 sudo mv livepeer.service transcoder.service transcoder.target prometheus.service orchestrator.target /etc/systemd/system/
 
