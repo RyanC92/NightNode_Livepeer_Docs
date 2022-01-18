@@ -63,6 +63,9 @@ wget -N -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 sudo apt-get update -y
 sudo apt-get install grafana-enterprise -y
 
+#downloading part 2 to enable and start the services, edit this file if you want to start a transcoder service only.
+wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/Livepeer_Setup_2_(Services).sh
+
 #Cleanup
 cd $HOME
 rm $HOME/livepeersetup/ -r
