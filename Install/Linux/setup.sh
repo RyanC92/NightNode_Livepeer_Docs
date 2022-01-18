@@ -16,6 +16,7 @@ wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Insta
 wget -N -C https://github.com/livepeer/go-livepeer/releases/download/v0.5.25/livepeer-linux-amd64.tar.gz
 wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.service
 wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/transcoder.service
+wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/transcoder.target
 
 #Install Livepeer
 tar -xvzf livepeer-linux-amd64.tar.gz
@@ -27,8 +28,8 @@ wget -N -C -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/r
 wget -N -C -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestratorcombo.conf
 
 sudo mv livepeer /usr/local/bin/
-sudo mv livepeer.service /etc/systemd/system/
-sudo mv orchestrator.target /etc/systemd/system
+sudo mv livepeer.service transcoder.service transcoder.target prometheus.service orchestrator.target /etc/systemd/system/
+
 
 #Prometheus Setup 
 tar -xvzf prometheus-2.32.1.linux-amd64.tar.gz
@@ -42,7 +43,6 @@ sudo mkdir -p /etc/prometheus/
 sudo mv prometheus.yml /etc/prometheus/
 sudo mv prometheus /usr/local/bin/
 sudo chown -R prometheus:prometheus /etc/prometheus/
-sudo mv prometheus.service /etc/systemd/system/
 
 #Download and install grafana
 echo "deb https://packages.grafana.com/enterprise/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
