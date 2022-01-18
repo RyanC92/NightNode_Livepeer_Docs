@@ -31,6 +31,10 @@ wget -N -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/
 wget -N -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_transcoder.conf
 wget -N -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestratorcombo.conf
 
+#rename old livepeer and prometheus folders in /usr/local/bin to .bak incase they exist
+mv /usr/local/bin/livepeer /usr/local/bin/livepeer.bak
+mv /usr/local/bin/prometheus /usr/local/bin/prometheus.bak
+
 #relocate livepeer and service files to their directories
 sudo mv livepeer /usr/local/bin/
 sudo mv livepeer.service transcoder.service transcoder.target prometheus.service orchestrator.target /etc/systemd/system/
