@@ -50,6 +50,8 @@ sudo mv prometheus /usr/local/bin/
 sudo chown -R prometheus:prometheus /etc/prometheus/
 
 #Download and install grafana
+#remove old grafana packages if they exist, multiple runs of this script will pile up duplicates.
+sudo rm /etc/apt/sources.list.d/grafana.list 
 echo "deb https://packages.grafana.com/enterprise/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 wget -N -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 sudo apt-get update -y
