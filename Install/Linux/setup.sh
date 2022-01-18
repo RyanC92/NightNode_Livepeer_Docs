@@ -15,7 +15,7 @@ wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Insta
 wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/orchestrator.target
 wget -N -C https://github.com/livepeer/go-livepeer/releases/download/v0.5.25/livepeer-linux-amd64.tar.gz
 wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.service
-
+wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/transcoder.service
 
 #Install Livepeer
 tar -xvzf livepeer-linux-amd64.tar.gz
