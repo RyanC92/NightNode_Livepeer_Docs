@@ -1,7 +1,7 @@
 #Script to remove Nightnodes services and files. (This will remove Prometheus and livepeer as well)
 echo "Starting Uninstall"
 
-sudo rm /usr/local/bin/livepeer/ /usr/local/bin/prometheus/ /etc/prometheus/
+sudo rm /usr/local/bin/livepeer/ /usr/local/bin/prometheus/ /etc/prometheus/ -r
 
 cd /etc/systemd/system/
 
