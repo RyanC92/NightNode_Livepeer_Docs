@@ -1,5 +1,5 @@
 [Unit]
-Description="Livepeer transcoder service that automatically connects to local orchestrator."
+Description="Launch livepeer service."
 After=network.target
 PartOf=transcoder.target
 StartLimitIntervalSec=0
