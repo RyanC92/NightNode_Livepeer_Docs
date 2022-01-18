@@ -2,6 +2,8 @@
 
 #move to home directory
 cd $HOME
+
+#create directory for setup
 mkdir livepeersetup/
 cd livepeersetup/
 
@@ -22,13 +24,14 @@ wget -N -C https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Insta
 
 #Install Livepeer
 tar -xvzf livepeer-linux-amd64.tar.gz
-# this is to rename it if you want.
+# renaming livepeer-linux-amd64 to livepeer
 mv livepeer-linux-amd64 livepeer
 
 wget -N -C -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestrator.conf
 wget -N -C -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_transcoder.conf
 wget -N -C -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestratorcombo.conf
 
+#relocate livepeer and service files to their directories
 sudo mv livepeer /usr/local/bin/
 sudo mv livepeer.service transcoder.service transcoder.target prometheus.service orchestrator.target /etc/systemd/system/
 
@@ -38,7 +41,7 @@ tar -xvzf prometheus-2.32.1.linux-amd64.tar.gz
 # this is to rename it if you want.
 mv prometheus-2.32.1.linux-amd64 prometheus
 
-#Create Prometheus user account, copy the yml file, setup the service and take ownership.
+#Create Prometheus/livepeer user account, copy the yml file and take ownership.
 sudo useradd --no-create-home --shell /bin/false prometheus
 sudo useradd --no-create-home --shell /bin/false livepeer
 sudo mkdir -p /etc/prometheus/
