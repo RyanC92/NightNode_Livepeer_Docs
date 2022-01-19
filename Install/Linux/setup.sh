@@ -68,10 +68,11 @@ sudo apt-get install grafana-enterprise -y
 echo "Run livepeer to create .lpData folder, this will crash and close as intended."
 ./usr/local/bin/livepeer/livepeer
 
-#downloading part 2 to enable and start the services, edit this file if you want to start a transcoder service only.
-wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/Livepeer_Setup_Services.sh
+
 
 #Cleanup
 cd $HOME
 rm $HOME/livepeersetup/ -r
 
+#downloading part 2 to enable and start the services, edit this file if you want to start a transcoder service only.
+wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/Livepeer_Setup_Services.sh
