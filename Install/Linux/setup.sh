@@ -49,11 +49,13 @@ mv prometheus-2.32.1.linux-amd64 prometheus
 
 #Create Prometheus/livepeer user account, copy the yml file and take ownership.
 sudo useradd --no-create-home --shell /bin/false prometheus
-sudo useradd --no-create-home --shell /bin/false livepeer
+sudo useradd --shell /bin/false livepeer
+sudo mkdir /home/livepeer/
 sudo mkdir -p /etc/prometheus/
 sudo mv prometheus.yml /etc/prometheus/
 sudo mv prometheus /usr/local/bin/
 sudo chown -R prometheus:prometheus /etc/prometheus/
+sudo chown -R livepeer:livepeer /home/livepeer
 
 #Download and install grafana
 #remove old grafana packages if they exist, multiple runs of this script will pile up duplicates.
