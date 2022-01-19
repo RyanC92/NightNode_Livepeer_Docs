@@ -69,7 +69,7 @@ echo "Run livepeer to create .lpData folder"
 ./usr/local/bin/livepeer/livepeer
 
 #downloading part 2 to enable and start the services, edit this file if you want to start a transcoder service only.
-wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/Livepeer_Setup_2_(Services).sh
+wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/Livepeer_Setup_Services.sh
 
 #Cleanup
 cd $HOME
