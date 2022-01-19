@@ -21,6 +21,7 @@ wget -N https://github.com/livepeer/go-livepeer/releases/download/v0.5.25/livepe
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.service
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/transcoder.service
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/transcoder.target
+wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeerOTsplit.service
 
 #Install Livepeer
 tar -xvzf livepeer-linux-amd64.tar.gz
@@ -39,7 +40,7 @@ mv /usr/local/bin/prometheus /usr/local/bin/prometheus.bak
 echo "relocating livepeer and service files"
 
 sudo mv livepeer /usr/local/bin/
-sudo mv livepeer.service transcoder.service transcoder.target prometheus.service orchestrator.target /etc/systemd/system/
+sudo mv livepeer.service transcoder.service transcoder.target prometheus.service orchestrator.target livepeerOTsplit.service /etc/systemd/system/
 
 
 #Prometheus Setup 
