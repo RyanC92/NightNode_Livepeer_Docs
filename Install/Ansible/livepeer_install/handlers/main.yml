@@ -1,0 +1,18 @@
+---
+- name: Start Livepeer
+  service: name=livepeer state=started
+  
+- name: Restart Livepeer
+  service: name=livepeer state=restarted
+
+- name: Stop Livepeer
+  service: name=livepeer state=stopped
+  
+- name: Start Prometheus
+  service: name=prometheus state=started
+  
+- name: Restart Prometheus
+  service: name=prometheus state=restarted
+
+- name: Stop Prometheus
+  service: name=prometheus state=stopped
