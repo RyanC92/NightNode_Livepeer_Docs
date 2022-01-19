@@ -6,13 +6,16 @@
 * Other project information can be found in the [wiki](https://github.com/livepeer/wiki/wiki)
 
 
-# Installation 
+# Installation (Part 1)
+### Notes: 
+1. There is a lot of information here, a lot of custom configurations can be done to meet your needs, this may just cover a few of them.
+2. Please backup/remove any pre-existing Livepeer, Prometheus or Grafana files prior to using this script. We do not take responsibility for any lost files as a result of using these scripts. 
 
 ### Linux
 
 First, fetch the latest install script 
 ```
-wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/setup.sh
+wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/setup.sh
 ```
 Next, run the following commands to make it executable
 
@@ -40,11 +43,22 @@ By default the script will utilize the directories
 
 # Modifications
 
+### livepeer.service (Modify to select your config file)
 
-### livepeer_orchestrator.conf (For standalone orchestrators or orchestrator/transcoder combos without separate instances)
+1. In the ```/etc/systemd/system``` directory modify the ```livepeer.service``` file to point the configuration file to either the ```livepeer_orchestrator.conf```, ```livepeer_orchestratorcombo.conf``` or the ```livepeer_transcoder.conf``` file. 
+
+2. In the ```/usr/local/bin/livepeer``` directory modify the configuration file you want to use with your instance. 
+  * If you're running a Standalone Orchestrator and have transcoder connect to you remotely, use the ```livepeer_orchestrator.conf``` file. 
+  * If you're running an Orchestrator/Transcoder on the same machine AND in the same process, use the ```livepeer_orchestratorcombo.conf``` file.
+  * If you're running an Orchestrator/Transcoder on the same machine BUT in separate process windows (useful if you plan to include external remote transcoders), modify ```livepeerOTsplit.service``` to point towards ```livepeer_transcoder.conf``` and use ```livepeer_orchestrator.conf``` for ```livepeer.service```. The ```livepeerOTsplit.service``` will require you to ```enable``` and ```start``` the process manually (on the first launch, after doing that it should run on startup.) OR include it in the ```orchestrator.target``` ```"Wants"``` line
+  * If you're running a Standalone Transcoder that will remotely connect to a remote Orchestrator, use the ```livepeer_transcoder.conf``` file.
+    * Additionally, only enable the ```transcoder.target``` ```prometheus.service``` and ```livepeer.service``` service files.
+
+For Orchestrators:
+### [livepeer_orchestrator.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_orchestrator.conf) (For Standalone Orchestrators)
 
 ```
-<orchestrator|transcoder|both(put orchestrator and transcoder by themselves on separate lines)>
+orchestrator
 ethUrl <infura|geth|alchemy url>
 orchSecret <path to file|string password>
 ethPassword <path to file|string password>
@@ -55,29 +69,67 @@ reward <true|false>
 maxSessions <#>
 nvidia <all|0,1,2,3 etc.>
 monitor 
-v <1-6>
+v 6
 autoAdjusPrice <true|false>
 ```
 
-For Transcoders: 
-### livepeer_transcoder.conf (For standalone transcoders)
+For Orchestrator/Transcoder Combo:
+### [livepeer_orchestratorcombo.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_orchestratorcombo.conf) (For Orchestrator/Transcoder Combo, running in the same process)
 
 ```
+orchestrator
 transcoder
 ethUrl <infura|geth|alchemy url>
 orchSecret <path to file|string password>
 ethPassword <path to file|string password>
+serviceAddr <orchestrator url or ip>
 maxGasPrice <maximum gas price to redeem a wining ticket, denoted in gwei. Example: 60 Gwei is denoted by 60000000000>
-reward false
+pricePerUnit <usually set between 800-1200>
+reward <true|false> #Set this to false, I've had instances where a reward call is still called even though this value defaults to false.
 maxSessions <#>
+nvidia <all|0,1,2,3 etc.>
+monitor 
+v 6
+autoAdjusPrice <true|false>
+```
+
+For Transcoders: 
+### [livepeer_transcoder.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_transcoder.conf) (For standalone transcoders)
+
+```
+transcoder
+orchSecret <path to file|string password>
+reward <true|false> #only needed if you arere using the same wallet on the same machine as the Orchestrator
+maxSessions <# of sessions>
 orchAddr <orchestrator domain or IP:8935>
 nvidia <all|0,1,2,3 etc.>
 monitor 
-v <1-6>
-autoAdjusPrice <true|false>
+v 6
 ```
 Note: reward false is not technically needed if you're not an orchestrator. However, if you're using the transcoder on the same host as the orchestrator, theres a risk of the transcoder calling the reward without the flag set to false. 
 
-### livepeer.sh (Modify to select your config file)
 
-In the /usr/local/bin/livepeer/ directory modify the ```livepeer.sh``` file to point the configuration file to either the ```livepeer_orchestrator.conf``` or the ```livepeer_orchestrator.conf``` file 
+# Installation (Part 2)
+
+Once you've run through Part 1, the necessary files should have been downloaded and moved to their proper directories. If you haven't already, go back and edit the ```livepeer.service```, ```livepeerOTsplit.service```*(if applicable)* and any of the configuration files. 
+
+If you have a backup of prometheus's Data folder, you may copy it into ```/etc/prometheus```.
+Backups of your eth wallet can be copied into ```/root/.lpData/```.
+
+At this point you can start enabling services. 
+There is a script called ```Livepeer_Setup_Services.sh``` that will handle the enabling of the following services:
+
+```
+prometheus.service
+grafana-server 
+livepeer.service
+orchestrator.target
+```
+
+Services like ```transcoder.target``` and ```livepeerOTsplit.service``` would need to be enabled separately.
+
+(Commands to enable and startup the services are ```sudo systemctl enable <Service>``` and ```sudo systemctl start <service>```)
+
+At this point livepeer, prometheus and grafana will all be running. 
+ * To configure grafana go to ```127.0.0.1:3000```
+ * To view or configure prometheus go to ```127.0.0.1:9090/metrics```
