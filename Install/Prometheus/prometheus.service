@@ -12,22 +12,7 @@ Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
 ExecStart=/bin/bash -c '/usr/local/bin/prometheus/prometheus --config.file="/etc/prometheus/prometheus.yml"  --storage.tsdb.path="/etc/prometheus/data/" --storage.tsdb.retention.time=1y'
 Restart=on-failure
 RestartSec=5s
-ProtectHome=yes
-ProtectClock=yes
-PrivateDevices=yes
-ProtectHostname=yes
-NoNewPrivileges=yes
-ProtectSystem=strict
-RestrictRealtime=yes
-RestrictSUIDSGID=yes
-ProtectKernelLogs=yes
-RestrictNamespaces=yes
-ProtectKernelModules=yes
-ProtectControlGroups=yes
-ProtectKernelTunables=yes
-SystemCallErrorNumber=EPERM
-SystemCallArchitectures=native
-SystemCallFilter=@system-service
+
 
 [Install]
 WantedBy=default.target
