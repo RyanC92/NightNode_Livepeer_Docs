@@ -1,0 +1,17 @@
+[Unit]
+Description="Launch livepeer service."
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+User=livepeer
+Group=livepeer
+Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
+WorkingDirectory= /usr/local/bin/livepeer/
+ExecStart= /usr/local/bin/livepeer/livepeer -config livepeer_transcoder.conf
+Restart=always
+RestartSec=3s
+
+
+[Install]
+WantedBy=multi-user.target
