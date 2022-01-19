@@ -65,7 +65,7 @@ wget -N -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 sudo apt-get update -y
 sudo apt-get install grafana-enterprise -y
 
-echo "Run livepeer to create .lpData folder"
+echo "Run livepeer to create .lpData folder, this will crash and close as intended."
 ./usr/local/bin/livepeer/livepeer
 
 #downloading part 2 to enable and start the services, edit this file if you want to start a transcoder service only.
