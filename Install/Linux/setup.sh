@@ -8,7 +8,7 @@ mkdir livepeersetup/
 cd livepeersetup/
 
 #install sudo (for minimal installs
-apt-get update -y && apt-get install sudo  apt-transport-https software-properties-common wget -N -y
+apt-get update -y && apt-get install sudo  apt-transport-https software-properties-common gnupg2 wget -N -y
 
 #Download Prometheus, grafana and necessary dependencies
 
@@ -19,7 +19,6 @@ wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/orchestrator.target
 wget -N https://github.com/livepeer/go-livepeer/releases/download/v0.5.25/livepeer-linux-amd64.tar.gz
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.service
-wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/transcoder.service
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/transcoder.target
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeerOTsplit.service
 
@@ -40,7 +39,7 @@ mv /usr/local/bin/prometheus /usr/local/bin/prometheus.bak
 echo "relocating livepeer and service files"
 
 sudo mv livepeer /usr/local/bin/
-sudo mv livepeer.service transcoder.service transcoder.target prometheus.service orchestrator.target livepeerOTsplit.service /etc/systemd/system/
+sudo mv livepeer.service transcoder.target prometheus.service orchestrator.target livepeerOTsplit.service /etc/systemd/system/
 
 
 #Prometheus Setup 
@@ -61,8 +60,8 @@ sudo chown -R livepeer:livepeer /home/livepeer
 #Download and install grafana
 #remove old grafana packages if they exist, multiple runs of this script will pile up duplicates.
 sudo rm /etc/apt/sources.list.d/grafana.list 
-echo "deb https://packages.grafana.com/enterprise/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 wget -N -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+echo "deb https://packages.grafana.com/enterprise/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 sudo apt-get update -y
 sudo apt-get install grafana-enterprise -y
 
