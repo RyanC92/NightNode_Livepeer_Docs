@@ -19,7 +19,6 @@ wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/orchestrator.target
 wget -N https://github.com/livepeer/go-livepeer/releases/download/v0.5.25/livepeer-linux-amd64.tar.gz
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.service
-wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/transcoder.target
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeerOTsplit.service
 
 #Install Livepeer
@@ -32,14 +31,14 @@ wget -N -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/
 wget -N -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestratorcombo.conf
 
 #rename old livepeer and prometheus folders in /usr/local/bin to .bak incase they exist
-mv /usr/local/bin/livepeer /usr/local/bin/livepeer.bak
-mv /usr/local/bin/prometheus /usr/local/bin/prometheus.bak
+mv /etc/livepeer /etc/livepeer.bak
+mv /etc/prometheus /etc/prometheus.bak
 
 #relocate livepeer and service files to their directories
 echo "relocating livepeer and service files"
 
-sudo mv livepeer /usr/local/bin/
-sudo mv livepeer.service transcoder.target prometheus.service orchestrator.target livepeerOTsplit.service /etc/systemd/system/
+sudo mv livepeer /etc/
+sudo mv livepeer.service prometheus.service orchestrator.target livepeerOTsplit.service /etc/systemd/system/
 
 
 #Prometheus Setup 
@@ -48,14 +47,19 @@ tar -xvzf prometheus-2.32.1.linux-amd64.tar.gz
 mv prometheus-2.32.1.linux-amd64 prometheus
 
 #Create Prometheus/livepeer user account, copy the yml file and take ownership.
-sudo useradd --no-create-home --shell /bin/false prometheus
-sudo useradd --shell /bin/false livepeer
-sudo mkdir /home/livepeer/
-sudo mkdir -p /etc/prometheus/
+sudo groupadd prometheus
+sudo groupadd livepeer
+sudo useradd --system -g prometheus --home /var/lib/prometheus prometheus
+sudo useradd --system -g livepeer --home /var/lib/livepeer livepeer
+sudo mkdir /var/lib/livepeer
+sudo chown -R livepeer:livepeer /var/lib/livepeer/
+sudo chown -R prometheus:prometheus /var/lib/prometheus/
+sudo mkdir /home/livepeer
+sudo mkdir -p /etc/prometheus
 sudo mv prometheus.yml /etc/prometheus/
-sudo mv prometheus /usr/local/bin/
+sudo mv prometheus/* /etc/
 sudo chown -R prometheus:prometheus /etc/prometheus/
-sudo chown -R livepeer:livepeer /home/livepeer
+sudo chown -R livepeer:livepeer /etc/livepeer/
 
 #Download and install grafana
 #remove old grafana packages if they exist, multiple runs of this script will pile up duplicates.
@@ -64,9 +68,6 @@ wget -N -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
 echo "deb https://packages.grafana.com/enterprise/deb stable main" | sudo tee -a /etc/apt/sources.list.d/grafana.list
 sudo apt-get update -y
 sudo apt-get install grafana-enterprise -y
-
-echo "Run livepeer to create .lpData folder, this will crash and close as intended."
-./usr/local/bin/livepeer/livepeer
 
 
 
