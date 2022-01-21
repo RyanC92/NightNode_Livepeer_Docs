@@ -27,3 +27,8 @@
 #### Prometheus
 
 [Prometheus Install and Documentation](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Prometheus)
+
+# Feedback
+
+### Please feel free to submit feedback using the link below which will create a github issue
+https://forms.gle/ASZeodPwp3uQntzC8
