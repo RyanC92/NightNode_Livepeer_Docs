@@ -37,7 +37,7 @@ mv /etc/prometheus /etc/prometheus.bak
 #relocate livepeer and service files to their directories
 echo "relocating livepeer and service files"
 
-sudo mv livepeer /etc/
+sudo mv livepeer/ /etc/
 sudo mv livepeer.service prometheus.service orchestrator.target livepeerOTsplit.service /etc/systemd/system/
 
 
@@ -51,15 +51,19 @@ sudo groupadd prometheus
 sudo groupadd livepeer
 sudo useradd --system -g prometheus --home /var/lib/prometheus prometheus
 sudo useradd --system -g livepeer --home /var/lib/livepeer livepeer
+
 sudo mkdir /var/lib/livepeer
+sudo mkdir /var/lib/prometheus
+sudo mkdir /etc/prometheus
+
 sudo chown -R livepeer:livepeer /var/lib/livepeer/
-sudo chown -R prometheus:prometheus /var/lib/prometheus/
-sudo mkdir /home/livepeer
-sudo mkdir -p /etc/prometheus
+sudo chown -R prometheus:prometheus /var/lib/prometheus
+sudo chown -R prometheus:prometheus /etc/prometheus
+sudo chown -R livepeer:livepeer /etc/livepeer
+
 sudo mv prometheus.yml /etc/prometheus/
 sudo mv prometheus/* /etc/
-sudo chown -R prometheus:prometheus /etc/prometheus/
-sudo chown -R livepeer:livepeer /etc/livepeer/
+
 
 #Download and install grafana
 #remove old grafana packages if they exist, multiple runs of this script will pile up duplicates.
