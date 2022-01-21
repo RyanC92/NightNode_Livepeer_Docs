@@ -4,7 +4,7 @@
 cd $HOME
 
 #create directory for setup
-mkdir livepeersetup/
+mkdir livepeersetup
 cd livepeersetup/
 
 #install sudo (for minimal installs
