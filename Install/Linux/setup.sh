@@ -52,17 +52,13 @@ sudo groupadd livepeer
 sudo useradd --system -g prometheus --home /var/lib/prometheus prometheus
 sudo useradd --system -g livepeer --home /var/lib/livepeer livepeer
 
-sudo mkdir /var/lib/livepeer
-sudo mkdir /var/lib/prometheus
-sudo mkdir /etc/prometheus
+sudo mkdir -P {/var/lib/livepeer/, /home/livepeer/.lpData/, /var/lib/prometheus, /etc/prometheus}
 
-sudo chown -R livepeer:livepeer /var/lib/livepeer/
-sudo chown -R prometheus:prometheus /var/lib/prometheus
-sudo chown -R prometheus:prometheus /etc/prometheus
-sudo chown -R livepeer:livepeer /etc/livepeer
+sudo chown -R livepeer:livepeer /var/lib/livepeer/ /etc/livepeer/ /home/livepeer/
+sudo chown -R prometheus:prometheus /var/lib/prometheus /etc/prometheus/
 
 sudo mv prometheus.yml /etc/prometheus/
-sudo mv prometheus/* /etc/
+sudo mv prometheus/ /etc/
 
 
 #Download and install grafana
@@ -81,3 +77,9 @@ rm $HOME/livepeersetup/ -r
 
 #downloading part 2 to enable and start the services, edit this file if you want to start a transcoder service only.
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/Livepeer_Setup_Services.sh
+
+chmod +x Livepeer_Setup_Services.sh
+
+echo "Now that this is done, modify the config files in '/etc/livepeer/' to match your configuration"
+echo "After modify the livepeer.service or livepeerOTsplit.service if applicable in '/etc/systemd/system/'"
+echo "Livepeer_setup_Services.sh is available to start and enable your services, this does not include the livepeerOTsplit.service" 
