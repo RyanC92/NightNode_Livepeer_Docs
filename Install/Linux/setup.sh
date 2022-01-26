@@ -77,8 +77,10 @@ rm $HOME/livepeersetup/ -r
 
 #downloading part 2 to enable and start the services, edit this file if you want to start a transcoder service only.
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/Livepeer_Setup_Services.sh
+#download updater, this will always download, stop services, copy the files over and restart services for the latest version.
+wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Maintenance/Linux/Update/livepeer_update.sh
 
-chmod +x Livepeer_Setup_Services.sh
+chmod +x Livepeer_Setup_Services.sh livepeer_update.sh
 
 echo "Now that this is done, modify the config files in '/etc/livepeer/' to match your configuration"
 echo "After modify the livepeer.service or livepeerOTsplit.service if applicable in '/etc/systemd/system/'"
