@@ -133,3 +133,9 @@ Services like ```transcoder.target``` and ```livepeerOTsplit.service``` would ne
 At this point livepeer, prometheus and grafana will all be running. 
  * To configure grafana go to ```127.0.0.1:3000```
  * To view or configure prometheus go to ```127.0.0.1:9090/metrics```
+
+# Feedback
+
+### Please feel free to submit feedback using the link below which will create a github issue
+https://forms.gle/ASZeodPwp3uQntzC8
+

@@ -5,5 +5,9 @@
 * Protocol information can be found in the [protocol](https://github.com/livepeer/protocol) repo
 * Other project information can be found in the [wiki](https://github.com/livepeer/wiki/wiki)
 
+### How to:
+
+This document is a work in progress and is currently a placeholder for future work to be compeleted.
+
 ### Guides:
 [Security Hardening - Restrict SSH](https://docs.rackspace.com/support/how-to/restrict-ssh-login-to-a-specific-ip-or-host/)
