@@ -7,8 +7,8 @@ StartLimitIntervalSec=0
 User=livepeer
 Group=livepeer
 Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
-WorkingDirectory= /usr/local/bin/livepeer/
-ExecStart= /usr/local/bin/livepeer/livepeer -config livepeer_transcoder.conf
+WorkingDirectory= /etc/livepeer/
+ExecStart= /etc/livepeer/livepeer -config livepeer_transcoder.conf
 Restart=always
 RestartSec=3s
 
