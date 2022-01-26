@@ -55,7 +55,7 @@ By default the script will utilize the directories
     * Additionally, only enable the ```transcoder.target``` ```prometheus.service``` and ```livepeer.service``` service files.
 
 
-##For Orchestrators:
+## For Orchestrators:
 ### [livepeer_orchestrator.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_orchestrator.conf) (For Standalone Orchestrators)
 
 ```
@@ -76,7 +76,7 @@ autoAdjusPrice <true|false>
 ```
 
 
-##For Orchestrator/Transcoder Combo:
+## For Orchestrator/Transcoder Combo:
 ### [livepeer_orchestratorcombo.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_orchestratorcombo.conf) (For Orchestrator/Transcoder Combo, running in the same process)
 
 ```
@@ -98,7 +98,7 @@ autoAdjusPrice <true|false>
 ```
 
 
-##For Transcoders: 
+## For Transcoders: 
 ### [livepeer_transcoder.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_transcoder.conf) (For standalone transcoders)
 
 ```
