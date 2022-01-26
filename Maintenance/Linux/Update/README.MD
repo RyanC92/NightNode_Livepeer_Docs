@@ -4,6 +4,22 @@ This tool is relatively simple and if meant to be deployed IF you have configure
 
 ```/etc/livepeer/```
 
+## Usage:
+
+Download the update script by using 
+
+``` wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Maintenance/Linux/Update/livepeer_update.sh ```
+
+After downloading turn it into an executable by running the following command
+
+``` chmod +x livepeer_update.sh ```
+
+To run the script:
+
+``` ./livepeer_update.sh ```
+
+## Lessons Learned:
+
 This script will always download the latest release of livepeer by using the following url:
 
 ```https://github.com/livepeer/go-livepeer/releases/latest/download/livepeer-linux-amd64.tar.gz```
