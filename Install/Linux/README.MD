@@ -37,8 +37,8 @@ By default the script will utilize the directories
 ```
 /etc/prometheus
 /etc/systemd/system/
-/usr/local/bin/livepeer/
-/usr/local/bin/prometheus/
+/etc/livepeer/
+/var/lib/livepeer/
 ```
 
 # Modifications
@@ -119,7 +119,7 @@ Note: reward false is not technically needed if you're not an orchestrator. Howe
 Once you've run through Part 1, the necessary files should have been downloaded and moved to their proper directories. If you haven't already, go back and edit the ```livepeer.service```, ```livepeerOTsplit.service```*(if applicable)* and any of the configuration files. 
 
 If you have a backup of prometheus's Data folder, you may copy it into ```/etc/prometheus```.
-Backups of your eth wallet can be copied into ```/root/.lpData/```.
+Backups of your eth wallet can be copied into ```/var/lib/livepeer/.lpData/```.
 
 At this point you can start enabling services. 
 There is a script called ```Livepeer_Setup_Services.sh``` that will handle the enabling of the following services:
