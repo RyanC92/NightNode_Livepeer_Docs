@@ -12,18 +12,22 @@ apt-get update -y && apt-get install sudo  apt-transport-https software-properti
 
 wget -N https://github.com/livepeer/go-livepeer/releases/latest/download/livepeer-linux-amd64.tar.gz
 
-#Install Livepeer
+#Extract Livepeer
+"Extract livepeer from livepeer-linux-amd64.tar.gz"
 tar -xvzf livepeer-linux-amd64.tar.gz
 # renaming livepeer-linux-amd64 to livepeer
 mv livepeer-linux-amd64 livepeer
 
+echo "Stopping Services"
 sudo systemctl stop livepeer.service orchestrator.target
 
 #copy new version into livepeer directory
+echo "Copying to directory '/etc/livepeer'"
 sudo cp livepeer/* /etc/livepeer
 
 cd $HOME
 rm $HOME/livepeersetup/ -r
 
 #restart livepeer services
+echo "Restarting Services"
 sudo systemctl start orchestrator.target livepeer.service
