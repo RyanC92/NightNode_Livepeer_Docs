@@ -9,7 +9,7 @@ User=prometheus
 Group=prometheus
 Type=simple
 Environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
-ExecStart=/bin/bash -c '/usr/local/bin/prometheus/prometheus --config.file="/etc/prometheus/prometheus.yml"  --storage.tsdb.path="/etc/prometheus/data/" --storage.tsdb.retention.time=1y'
+ExecStart=/bin/bash -c '/etc/prometheus/prometheus --config.file="/etc/prometheus/prometheus.yml"  --storage.tsdb.path="/etc/prometheus/data/" --storage.tsdb.retention.time=1y'
 Restart=on-failure
 RestartSec=5s
 
