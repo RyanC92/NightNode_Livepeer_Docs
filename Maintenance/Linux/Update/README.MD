@@ -18,11 +18,6 @@ To run the script:
 
 ``` ./livepeer_update.sh ```
 
-## Lessons Learned:
-
-This script will always download the latest release of livepeer by using the following url:
-
-```https://github.com/livepeer/go-livepeer/releases/latest/download/livepeer-linux-amd64.tar.gz```
 
 ## Steps this script will take:
 
@@ -31,3 +26,9 @@ The script will create a temporary directory called livepeersetup in your $HOME 
 Next, it will download and extract the livepeer files, stop your ```livepeer.service``` and ```orchestrator.target``` files ([part of this install script](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Linux)) and copy the files to the ```/etc/livepeer/``` directory. 
 
 Finally it will then remove the livepeersetup folder from your $HOME directory and restart ```livepeer.service``` and ```orchestrator.target```.
+
+## Lessons Learned:
+
+This script will always download the latest release of livepeer by using the following url:
+
+```https://github.com/livepeer/go-livepeer/releases/latest/download/livepeer-linux-amd64.tar.gz```
