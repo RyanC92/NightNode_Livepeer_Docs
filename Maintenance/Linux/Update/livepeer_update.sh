@@ -10,7 +10,7 @@ cd livepeersetup/
 #install sudo (for minimal installs
 apt-get update -y && apt-get install sudo  apt-transport-https software-properties-common gnupg2 wget -N -y
 
-wget -N https://github.com/livepeer/go-livepeer/releases/latest/download/livepeer-linux-amd64.tar.gzz
+wget -N https://github.com/livepeer/go-livepeer/releases/latest/download/livepeer-linux-amd64.tar.gz
 
 #Install Livepeer
 tar -xvzf livepeer-linux-amd64.tar.gz
