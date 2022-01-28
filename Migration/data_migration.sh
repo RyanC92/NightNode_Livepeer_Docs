@@ -9,7 +9,7 @@ sudo systemctl stop prometheus.service
 sudo systemctl stop livepeer.service
 
 cp /etc/prometheus/ migration/prometheus/ -r
-cp /var/lib/livepeer/.lpData/ /migraton/.lpData -r
+cp /var/lib/livepeer/.lpData/ /migration/.lpData -r
 cp /etc/livepeer/ /migration/livepeer/ -r
 cp /home/livepeer/.lpData/ /migration/home/.lpData/ -r
 
