@@ -4,6 +4,7 @@ mkdir -p migration
 cd migration
 mkdir -p prometheus .lpData livepeer home/.lpData
 
+cd.. 
 
 sudo systemctl stop prometheus.service
 sudo systemctl stop livepeer.service
