@@ -4,7 +4,7 @@ mkdir -p migration
 cd migration
 mkdir -p prometheus .lpData livepeer home/.lpData
 
-cd.. 
+cd .. 
 
 sudo systemctl stop prometheus.service
 sudo systemctl stop livepeer.service
@@ -14,4 +14,4 @@ cp /var/lib/livepeer/.lpData/ $HOME/migration/.lpData/ -r
 cp /etc/livepeer/ $HOME/migration/livepeer/ -r
 cp /home/livepeer/.lpData/ $HOME/migration/home/.lpData/ -r
 
-sudo tar -czvf livepeer_migration.tar.gz /migration/
+sudo tar -czvf livepeer_migration.tar.gz $HOME/migration/
