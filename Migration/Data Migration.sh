@@ -11,4 +11,4 @@ cp /var/lib/livepeer/.lpData/ /migraiton/.lpData/
 cp /etc/livepeer/ /migration/livepeer/
 cp /home/livepeer/.lpData/ /migration/home/.lpData/
 
-#sudo tar -czvf prometheus-data.tar.gz /etc/prometheus/
+sudo tar -czvf livepeer_migration.tar.gz /migration/
