@@ -12,7 +12,7 @@ apt-get update -y && apt-get install sudo  apt-transport-https software-properti
 
 #Download Prometheus, grafana and necessary dependencies
 
-wget -N https://github.com/prometheus/prometheus/releases/download/v2.32.1/prometheus-2.32.1.linux-amd64.tar.gz
+wget -N https://github.com/prometheus/prometheus/releases/download/v2.33.0/prometheus-2.33.0.linux-amd64.tar.gz
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.yml
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer.service
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.yml
@@ -42,7 +42,7 @@ sudo mv livepeer.service prometheus.service orchestrator.target livepeerOTsplit.
 
 
 #Prometheus Setup 
-tar -xvzf prometheus-2.32.1.linux-amd64.tar.gz
+tar -xvzf prometheus-2.33.0.linux-amd64.tar.gz
 # this is to rename it if you want.
 mv prometheus-2.32.1.linux-amd64 prometheus
 
