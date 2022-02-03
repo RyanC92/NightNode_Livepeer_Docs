@@ -19,7 +19,8 @@ To run the script:
 ``` ./livepeer_update.sh ```
 
 Code in one run:
-```wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Maintenance/Linux/Update/livepeer_update.sh
+```
+wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Maintenance/Linux/Update/livepeer_update.sh
 chmod +x livepeer_update.sh
 ./livepeer_update.sh
 ```
