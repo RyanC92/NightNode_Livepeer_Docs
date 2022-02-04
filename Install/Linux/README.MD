@@ -29,6 +29,16 @@ Run the "setup.sh" file
 ./setup.sh
 ```
 
+
+#### Combined commands for a single copy and paste
+
+```
+wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/setup.sh
+chmod +x setup.sh
+./setup.sh
+
+```
+
 This will prompt the script to download all necessary files for Livepeer, prometheus and grafana and install all 3 applications
 
 Currently it is necessary to modify the livepeer.sh and livepeer.conf file to fit your environment
