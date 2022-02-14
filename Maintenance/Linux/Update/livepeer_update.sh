@@ -17,8 +17,10 @@ wget -N https://github.com/livepeer/go-livepeer/releases/latest/download/livepee
 tar -xvzf livepeer-linux-amd64.tar.gz
 
 
-echo "Stopping Services"
-sudo systemctl stop livepeer.service orchestrator.target
+echo "Stopping Services, if you see any errors about services not being found, that is fine."
+echo "If you get cp errors, that is because livepeer is active somehow, check your services, if you have custom services that do not fit what is listed below it will not stop the service"
+echo "Modify this script to then list the custom service you are running"
+sudo systemctl stop livepeer.service orchestrator.target livepeerOTsplit.service transcoder.service
 
 #copy new version into livepeer directory
 echo "Copying to directory '/etc/livepeer'"
