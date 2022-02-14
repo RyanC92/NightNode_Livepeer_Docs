@@ -26,9 +26,9 @@ To run the script:
 
 Code in one run:
 ```
-wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Maintenance/Linux/Update/livepeer_update.sh
-chmod +x livepeer_update.sh
-./livepeer_update.sh
+sudo wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Maintenance/Linux/Update/livepeer_update.sh
+sudo chmod +x livepeer_update.sh
+sudo ./livepeer_update.sh
 ```
 
 ## Steps this script will take:
