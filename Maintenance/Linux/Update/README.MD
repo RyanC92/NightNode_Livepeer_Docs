@@ -4,7 +4,13 @@ This tool is relatively simple and if meant to be deployed IF you have configure
 
 ```/etc/livepeer/```
 
+
+
 ## Usage:
+
+### Please modify this file to fit your services that you are utilizing, this will stop and start services based upon the serivces used in the install scripts and will not automatically conform to your setup!                                                                                                          
+
+
 
 Download the update script by using 
 
