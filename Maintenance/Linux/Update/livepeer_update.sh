@@ -1,5 +1,10 @@
 #!/bin/bash
 
+##############################################################################################################################################################
+# Please modify this file to fit your services that you are utilizing, this will stop and start services based upon the serivces used in the install scripts #
+# and will not automatically conform to your setup!                                                                                                          #
+##############################################################################################################################################################
+
 #move to home directory
 cd $HOME
 
@@ -18,7 +23,7 @@ tar -xvzf livepeer-linux-amd64.tar.gz
 
 
 echo "Stopping Services, if you see any errors about services not being found, that is fine."
-echo "If you get cp errors, that is because livepeer is active somehow, check your services, if you have custom services that do not fit what is listed below it will not stop the service"
+echo "'If' you get cp errors, that is because livepeer is active somehow, check your services, if you have custom services that do not fit what is listed below it will not stop the service"
 echo "Modify this script to then list the custom service you are running"
 sudo systemctl stop livepeer.service orchestrator.target livepeerOTsplit.service transcoder.service
 
@@ -28,6 +33,9 @@ sudo cp livepeer-linux-amd64/* /etc/livepeer
 
 cd $HOME
 rm $HOME/livepeersetup/ -r
+
+echo "Taking back ownership"
+sudo chown -R livepeer:livepeer /etc/livepeer/
 
 #restart livepeer services
 echo "Restarting Services"
