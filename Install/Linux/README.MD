@@ -33,9 +33,9 @@ Run the "setup.sh" file
 #### Combined commands for a single copy and paste
 
 ```
-wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/setup.sh
-chmod +x setup.sh
-./setup.sh
+sudo wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/setup.sh
+sudo chmod +x setup.sh
+sudo ./setup.sh
 
 ```
 
@@ -60,7 +60,7 @@ By default the script will utilize the directories
 2. In the ```/usr/local/bin/livepeer``` directory modify the configuration file you want to use with your instance. 
   * If you're running a Standalone Orchestrator and have transcoder connect to you remotely, use the ```livepeer_orchestrator.conf``` file. 
   * If you're running an Orchestrator/Transcoder on the same machine AND in the same process, use the ```livepeer_orchestratorcombo.conf``` file.
-  * If you're running an Orchestrator/Transcoder on the same machine BUT in separate process windows (useful if you plan to include external remote transcoders), modify ```livepeerOTsplit.service``` to point towards ```livepeer_transcoder.conf``` and use ```livepeer_orchestrator.conf``` for ```livepeer.service```. The ```livepeerOTsplit.service``` will require you to ```enable``` and ```start``` the process manually (on the first launch, after doing that it should run on startup.) OR include it in the ```orchestrator.target``` ```"Wants"``` line
+  * If you're running an Orchestrator/Transcoder on the same machine BUT in separate process windows (useful if you plan to include external remote transcoders), modify ```livepeer_transcoder.service``` to point towards ```livepeer_transcoder.conf``` and use ```livepeer_orchestrator.conf``` for ```livepeer.service```. The ```livepeer_transcoder.service``` will require you to ```enable``` and ```start``` the process manually (on the first launch, after doing that it should run on startup.) OR include it in the ```orchestrator.target``` ```"Wants"``` line
   * If you're running a Standalone Transcoder that will remotely connect to a remote Orchestrator, use the ```livepeer_transcoder.conf``` file.
     * Additionally, only enable the ```transcoder.target``` ```prometheus.service``` and ```livepeer.service``` service files.
 
@@ -73,7 +73,8 @@ orchestrator
 ethUrl <infura|geth|alchemy url>
 orchSecret <path to file|string password>
 ethPassword <path to file|string password>
-ethKeystorePath /var/lib/livepeer/.lpData/mainnet/keystore/
+ethKeystorePath /var/lib/livepeer/.lpData/arbitrum-one-mainnet/keystore/
+datadir /var/lib/livepeer/.lpData/arbitrum-one-mainnet/
 serviceAddr <orchestrator url or ip>
 maxGasPrice <maximum gas price to redeem a wining ticket, denoted in gwei. Example: 60 Gwei is denoted by 60000000000>
 pricePerUnit <usually set between 800-1200>
@@ -95,7 +96,8 @@ transcoder
 ethUrl <infura|geth|alchemy url>
 orchSecret <path to file|string password>
 ethPassword <path to file|string password>
-ethKeystorePath /var/lib/livepeer/.lpData/mainnet/keystore/
+ethKeystorePath /var/lib/livepeer/.lpData/arbitrum-one-mainnet/keystore/
+datadir /var/lib/livepeer/.lpData/arbitrum-one-mainnet/
 serviceAddr <orchestrator url or ip>
 maxGasPrice <maximum gas price to redeem a wining ticket, denoted in gwei. Example: 60 Gwei is denoted by 60000000000>
 pricePerUnit <usually set between 800-1200>
@@ -126,7 +128,7 @@ Note: reward false is not technically needed if you're not an orchestrator. Howe
 
 # Installation (Part 2)
 
-Once you've run through Part 1, the necessary files should have been downloaded and moved to their proper directories. If you haven't already, go back and edit the ```livepeer.service```, ```livepeerOTsplit.service```*(if applicable)* and any of the configuration files. 
+Once you've run through Part 1, the necessary files should have been downloaded and moved to their proper directories. If you haven't already, go back and edit the ```livepeer.service```, ```livepeer_transcoder.service```*(if applicable)* and any of the configuration files. 
 
 If you have a backup of prometheus's Data folder, you may copy it into ```/etc/prometheus```.
 Backups of your eth wallet can be copied into ```/var/lib/livepeer/.lpData/```.
@@ -141,7 +143,7 @@ livepeer.service
 orchestrator.target
 ```
 
-Services like ```transcoder.target``` and ```livepeerOTsplit.service``` would need to be enabled separately.
+Services like ```transcoder.target``` and ```livepeer_transcoder.service``` would need to be enabled separately.
 
 (Commands to enable and startup the services are ```sudo systemctl enable <Service>``` and ```sudo systemctl start <service>```)
 
