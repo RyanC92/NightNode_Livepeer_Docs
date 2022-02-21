@@ -33,9 +33,9 @@ Run the "setup.sh" file
 #### Combined commands for a single copy and paste
 
 ```
-sudo wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/setup.sh
-sudo chmod +x setup.sh
-sudo ./setup.sh
+wget https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/setup.sh
+chmod +x setup.sh
+./setup.sh
 
 ```
 
