@@ -51,7 +51,7 @@ sudo groupadd livepeer
 sudo useradd --system -g prometheus --home /var/lib/prometheus prometheus
 sudo useradd --system -g livepeer --home /var/lib/livepeer livepeer
 
-sudo mkdir -p {/var/lib/livepeer/, /home/livepeer/.lpData/, /var/lib/prometheus, /etc/prometheus}
+sudo mkdir -p /var/lib/livepeer/ /home/livepeer/.lpData/ /var/lib/prometheus/ /etc/prometheus/
 
 sudo chown -R livepeer:livepeer /var/lib/livepeer/ /etc/livepeer/ /home/livepeer/
 sudo chown -R prometheus:prometheus /var/lib/prometheus /etc/prometheus/
