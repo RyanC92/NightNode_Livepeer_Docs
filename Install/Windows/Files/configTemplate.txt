@@ -1,0 +1,59 @@
+##############################################
+#Uncomment the flags if you want to use them.#
+##############################################
+#                Settings                    #
+##############################################
+
+orchestrator
+transcoder
+network arbitrum-one-mainnet
+
+##############################################
+#              RPC Providers                 #
+##############################################
+
+#Alchemy
+#ethUrl <RPC URL>
+
+#Infura
+#ethUrl <RPC URl>
+
+#Arbnode
+#ethUrl <RPC URL>
+
+#Arbitrum RPC
+ethUrl arb1.arbitrum.io/rpc
+
+##############################################
+#                Configs                     #
+#             Key management                 #
+##############################################
+
+ethKeystorePath <Path to Keystore>
+datadir <Path to Data Directory>
+ethPassword <Wallet password>
+
+##############################################
+#      Redeemer Info (if applicable)         #
+##############################################
+#ethOrchAddr <Eth Address>
+#redeemerAddr <IP:PORT>
+
+##############################################
+#        Orchestrator Management             #
+##############################################
+
+serviceAddr <IP:PORT>
+cliAddr <IP:PORT>
+orchSecret <string or path to secret file> #if you're using remote transcoders
+maxGasPrice 5000000000 #only processes transactions when its under .5 gwei
+pricePerUnit <900-1200 recommended>
+#blockPollingInterval 10
+nvidia all #<all,0,1,2,3 etc>
+maxSessions <#>
+monitor
+v 6
+
+#####################################
+#            End File               #
+#####################################
