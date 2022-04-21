@@ -5,7 +5,7 @@
 * Protocol information can be found in the [protocol](https://github.com/livepeer/protocol) repo
 * Other project information can be found in the [wiki](https://github.com/livepeer/wiki/wiki)
 
-#Installation (Part 1)
+# Installation (Part 1)
 
 ### Windows
 
