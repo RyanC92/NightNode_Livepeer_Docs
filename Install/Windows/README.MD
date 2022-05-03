@@ -35,7 +35,7 @@ Once you modify the files, there are corresponding batch files for each launcher
 
 Follow the config file guidance The below configs will look similar to the text below, replace the field that are encapuslated with < text >, removing the brackets <> (See the #Arbitrum RPC ethURL for how it should look.)
 
-## livepeer_orchestrator.conf (For Standalone Orchestrators - No Transcoders connected)
+### livepeer_orchestrator.conf (For Standalone Orchestrators - No Transcoders connected)
 
 ```
 ##############################################
@@ -102,7 +102,7 @@ v 6
 
 This is basically the same thing, however it just has ```transcoder``` uncommented and orchSecret is not needed since it will be local. 
 
-## livepeer_orchestratorcombo.conf
+### livepeer_orchestratorcombo.conf
 
 ```
 ##############################################
@@ -170,9 +170,9 @@ Note: running an O/T Combo in the same process will not allow remote Transcoders
 
 # For Transcoders:
 
-## livepeer_transcoder - GPU ALL.conf
-## livepeer_transcoder - GPU0.conf
-## livepeer_transcoder - GPU1.conf
+### livepeer_transcoder - GPU ALL.conf
+### livepeer_transcoder - GPU0.conf
+### livepeer_transcoder - GPU1.conf
 
 This is for local transcoders or remote transcoders, change the IP for the orchAddr to point to their IP address if necessary, if its on the same machine, you can keep it as 127.0.0.1.
 
@@ -201,4 +201,5 @@ v 6
 
 #####################################
 #            End File               #
-#####################################```
+#####################################
+```
