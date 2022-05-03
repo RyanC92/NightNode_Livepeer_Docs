@@ -5,6 +5,17 @@
 * Protocol information can be found in the [protocol](https://github.com/livepeer/protocol) repo
 * Other project information can be found in the [wiki](https://github.com/livepeer/wiki/wiki)
 
+#### Table of Contents
+
+1. [Installation - Part 1 - Livepeer](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-1-livepeer)
+2. [Modifications - Livepeer](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#modifications)
+  2a. [For Orchestrators](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-orchestrators)
+  2b. [For Orchestrator/Transcoder Combo](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-orchestratortranscoder-combo)
+  2c. [For Transcoders](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-transcoders)
+3. [Installation - Part 2 - Grafana](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-2-grafana)
+4. [Installation - Part 3 - Prometheus](
+  
+  
 # Installation (Part 1: Livepeer)
 
 ### Windows
@@ -209,7 +220,12 @@ v 6
 
 Included in the installer for livepeer is the installer for Grafana for Windows. This will install as part of the process of the installer. 
 
+The default location for the Grafana Installation is ```C:\Program Files\GrafanaLabs\```
+
 After grafana is installed navigate to ```localhost:3000``` to verify that grafana has been installed properly. 
+
+
+# Installation (Part 3: Prometheus)
 
 
 
