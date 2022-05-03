@@ -102,6 +102,8 @@ v 6
 
 This is basically the same thing, however it just has ```transcoder``` uncommented and orchSecret is not needed since it will be local. 
 
+## livepeer_orchestratorcombo.conf
+
 ```
 ##############################################
 #Uncomment the flags if you want to use them.#
@@ -165,3 +167,38 @@ v 6
 ```
 
 Note: running an O/T Combo in the same process will not allow remote Transcoders to connect to this node, if you want to have remote Transcoders, run the two processes separately. 
+
+# For Transcoders:
+
+## livepeer_transcoder - GPU ALL.conf
+## livepeer_transcoder - GPU0.conf
+## livepeer_transcoder - GPU1.conf
+
+This is for local transcoders or remote transcoders, change the IP for the orchAddr to point to their IP address if necessary, if its on the same machine, you can keep it as 127.0.0.1.
+
+This will also use all GPU's on the machine. If you want to change this for GPU 1,2,3,4,5 etc. put the corresponding number next to ```nvidia``` replacing ```all``` with the number. 
+
+The files ```livepeer_transcoder - GPU0.conf``` and ```livepeer_transcoder - GPU1.conf``` are already configured to utilize those GPUs individually. you can also add gpus specifically by doing ```nvidia 1,3,5``` and it will run GPU 2,4,5 in your computer. (numbering starts at 0)
+
+```
+##############################################
+#                Settings                    #
+##############################################
+
+transcoder
+
+##############################################
+#        Transcoder Management               #
+##############################################
+
+orchAddr 127.0.0.1:8935 #If your orchestrator is on a VPS or off site location, change the orch address to that servers IP.
+cliAddr 127.0.0.1:7925
+orchSecret <string or path to secret file> #if you're using remote transcoders
+nvidia all
+maxSessions <#>
+monitor
+v 6
+
+#####################################
+#            End File               #
+#####################################```
