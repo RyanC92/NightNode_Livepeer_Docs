@@ -5,7 +5,7 @@
 * Protocol information can be found in the [protocol](https://github.com/livepeer/protocol) repo
 * Other project information can be found in the [wiki](https://github.com/livepeer/wiki/wiki)
 
-# Installation
+# Installation (Part 1: Livepeer)
 
 ### Windows
 
@@ -204,6 +204,12 @@ v 6
 #####################################
 ```
 
+
+# Installation (Part 2: Grafana)
+
+Included in the installer for livepeer is the installer for Grafana for Windows. This will install as part of the process of the installer. 
+
+After grafana is installed navigate to ```localhost:3000``` to verify that grafana has been installed properly. 
 
 
 
