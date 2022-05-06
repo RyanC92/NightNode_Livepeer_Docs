@@ -1,5 +1,5 @@
 Start .\Prometheus.bat
-Start C:\Program Files\Livepeer\Orchestrator.bat
+Start .\Orchestrator.bat
 #Start "" ".\Transcoder - GPU 1.bat"
 #Start "" ".\Transcoder - GPU 2.bat"
 #Start "" ".\Transcoder - GPU ALL.bat"

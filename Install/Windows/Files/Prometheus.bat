@@ -3,8 +3,7 @@
 
 TITLE Prometheus
 
-cd C:\Prometheus\
-.\Prometheus.exe --storage.tsdb.retention.time=1y
+.\Prometheus\Prometheus.exe --config.file=.\prometheus.yml --storage.tsdb.path=".\prometheus\data\ --storage.tsdb.retention.time=1y
 
 goto Restart
 pause

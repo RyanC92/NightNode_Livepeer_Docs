@@ -4,7 +4,7 @@
 
 TITLE Livepeer - OT Combo
 
-.\livepeer-windows-amd64\livepeer.exe -config livepeer_orchestratorcombo.conf
+.\Binaries\livepeer.exe -config livepeer_orchestratorcombo.conf
 
 
 goto restart

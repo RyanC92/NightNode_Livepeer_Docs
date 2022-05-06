@@ -4,7 +4,7 @@
 
 TITLE Livepeer Transcoder
 
-.\livepeer-windows-amd64\livepeer.exe -config livepeer_orchestrator.conf
+.\Binaries\livepeer.exe -config livepeer_orchestrator.conf
 
 
 goto restart
