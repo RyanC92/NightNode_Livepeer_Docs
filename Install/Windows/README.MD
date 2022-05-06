@@ -227,7 +227,9 @@ After grafana is installed navigate to ```localhost:3000``` to verify that grafa
 
 # Installation (Part 3: Prometheus)
 
+Included as well in the install for livepeer, the installer will go to prometheus and download the zip and extract it. The files get extracted to C:\prometheus-2.35.0.windows-amd64\
 
+The batch file within the livepeer installer folder is set to point to this. Please utilize the the ```prometheus.yml``` file located in the livepeer install folder. 
 
 # Feedback
 
