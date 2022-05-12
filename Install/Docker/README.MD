@@ -61,7 +61,7 @@ If any of the following steps fail - YOU MUST STOP HERE! Please revisit the Live
 
 ```sudo docker run --gpus all nvidia/cuda:11.0-base ```
 
-  - *output* same output as nvidia-smi
+  - *output* same as nvidia-smi
   - if this fails, please review your NVIDIA / Docker setup.
 
 # Livepeer Configuration
@@ -71,7 +71,8 @@ In this section, we will review the livepeer configuration file. I'd encourage y
 1. Single Container combined Orchestrator/Transcoder
 2. Separate Containers for Orchestrator and Separate Transcoder
 
-**livepeer.conf**
+## livepeer.conf
+
 All configuration for livepeer will be stored in the livepeer.conf file.
 
 create a directory that will contain your livepeer data.
@@ -116,7 +117,7 @@ autoAdjustPrice false*
 
 TOOD: describe foreground and background containers
 
-``` docker run --rm --gpus all --name livepeer-orch-trans -d /path/to/store/livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf ```
+``` docker run --rm --gpus all --name livepeer-orch-trans -d -v /path/to/store/livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf ```
 
 ### View container logs
 
@@ -132,9 +133,9 @@ TOOD: describe foreground and background containers
 
 ### Start The containers
 
- ```docker run --rm --name livepeer-orch -d /path/to/store/livepeer-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+ ```docker run --rm --name livepeer-orch -d -v /path/to/store/livepeer-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf```
 
- ```docker run --rm --gpus all --name livepeer-trans -d /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+ ```docker run --rm --gpus all --name livepeer-trans -d -v /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
 # Monitoring Docker and Livepeer
 
