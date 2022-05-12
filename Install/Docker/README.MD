@@ -42,19 +42,25 @@ If any of the following steps fail - YOU MUST STOP HERE! Please revisit the Live
 
 *If the version numbers don't match, you should be able to proceed assuming the Livepeer configuration works on this server without Docker.*
 
-- **command**: docker -v 
+``` docker -v ```
+
   - **output** *Docker version 20.10.14, build a224086*
-- **command**: docker info
+
+``` docker info```
+
   - Look for the **Runtimes** section and ensure you see the nvidia entry listed
   - **output** : *Runtimes: runc io.containerd.runc.v2 io.containerd.runtime.v1.linux **nvidia** .*
-- **command**: nvidia-smi
+
+``` nvidia-smi```
   
   The NVIDIA-SMI output should contain:
   
   - *NVIDIA-SMI 510.60.02* 
   - *Driver Version: 510.60.02*
   - *CUDA Version: 11.6*
-- **command**: sudo docker run --gpus all nvidia/cuda:11.0-base nvidia-smi
+
+```sudo docker run --gpus all nvidia/cuda:11.0-base ```
+
   - *output* same output as nvidia-smi
   - if this fails, please review your NVIDIA / Docker setup.
 
@@ -69,18 +75,21 @@ In this section, we will review the livepeer configuration file. I'd encourage y
 All configuration for livepeer will be stored in the livepeer.conf file.
 
 create a directory that will contain your livepeer data.
-- **command**: mkdir -p /path/to/store/livepeer/
+
+```mkdir -p /path/to/store/livepeer/```
 
 Create the livepeer.conf file.
-- **command**: touch /path/to/store/livepeer/livepeer.conf
+
+``` touch /path/to/store/livepeer/livepeer.conf```
 
 Create the eth_secret.txt file.
-- **command**: touch /path/to/store/livepeer/eth_secret.conf
+
+``` touch /path/to/store/livepeer/eth_secret.conf```
 
 Create the kestore and copy your ETH private key.
-- **command**: mkdir -p /path/to/store/livepeer/arbitrum/keystore
+```mkdir -p /path/to/store/livepeer/arbitrum/keystore```
 
-- copy your json file to /path/to/store/livepeer/arbitrum/keystore/
+- copy your json file to ```/path/to/store/livepeer/arbitrum/keystore/```
 
 ## Configure Combined Orchestrator/Transcoder
 
@@ -107,15 +116,15 @@ autoAdjustPrice false*
 
 TOOD: describe foreground and background containers
 
- docker run --rm --name livepeer-orch-trans -d /path/to/store/livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
+``` docker run --rm --gpus all --name livepeer-orch-trans -d /path/to/store/livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf ```
 
 ### View container logs
 
-docker logs livepeer-orch-trans -f
+```docker logs livepeer-orch-trans -f```
 
 ### Stop The container 
 
-docker stop livepeer-orch-trans
+```docker stop livepeer-orch-trans```
 
 ## Configure Standalone Orchestrator 
 
@@ -123,10 +132,9 @@ docker stop livepeer-orch-trans
 
 ### Start The containers
 
- docker run --rm --name livepeer-orch -d /path/to/store/livepeer-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
+ ```docker run --rm --name livepeer-orch -d /path/to/store/livepeer-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
- docker run --rm --name livepeer-trans -d /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
-
+ ```docker run --rm --gpus all --name livepeer-trans -d /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
 # Monitoring Docker and Livepeer
 
