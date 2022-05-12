@@ -32,9 +32,26 @@ LINK to Livepeer arch docs
 
 # Livepeer Configuration
 
+livepeer.conf
+
+ethUrl <YOUR ETH URL - Infura, Alchemy, Other>
+ethPassword /root/.lpData/eth_secret.txt
+serviceAddr <YOUR IP ADDR>:8935
+network arbitrum-one-mainnet 
+orchestrator true
+transcoder true
+pricePerUnit 700
+monitor true
+v 6
+maxSessions 10
+autoAdjustPrice false
+
 ## Docker Environment Variables (Optional)
 
-## Standalone Orchestrator / Transcodder
+## Standalone Orchestrator / Transcoder
+
+ docker run -it -v /Users/mazup/Desktop/livepeer_stuff/docker-livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
+
 
 ## Separate Orchestrator / Separate Transcoder
 
