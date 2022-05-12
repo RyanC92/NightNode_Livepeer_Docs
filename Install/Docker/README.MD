@@ -37,7 +37,9 @@ This guide was developed using:
 ## Verification Steps 
 Please run the following commands to make sure you Docker/Livepeer environment is ready for configuration.
 
-If any of the following steps fail - YOU MUST STOP HERE! Please revisit the Livepeer resources to ensure a NON-docker enviroment can run on this server before proceeding.
+If any of the following steps fail - YOU MUST STOP HERE! Please revisit the Livepeer resources to ensure a NON-docker enviroment can run on this server before proceeding. 
+
+*If the version numbers don't match, you should be able to proceed assuming the Livepeer configuration works on this server without Docker.*
 
 - **command**: docker -v 
   - **output** *Docker version 20.10.14, build a224086*
@@ -55,32 +57,68 @@ If any of the following steps fail - YOU MUST STOP HERE! Please revisit the Live
   - *output* same output as nvidia-smi
   - if this fails, please review your NVIDIA / Docker setup.
 
-# Docker Volumes / Networks Setup
+# Docker Volumes Setup
+
+Inside the Docker container, Livepeer will store the various files on the /root/.lpData directory. We must create a docker volume to persist file changes when containers restart.
+
+- **command**: docker volume create combinedLpData
+- **command**: docker volume create orchLpData
+- **command**: docker volume create transLpData
+- **command**: docker volume list
+  - *output*: \
+            **DRIVER VOLUME NAME \
+            local combinedLpData \
+             local orchLpData \
+             local transLpData**
 
 # Livepeer Configuration
 
-livepeer.conf
+In this section, we will review the livepeer configuration file. I'd encourage you to review all the possible Livepeer configuration settings. For this guide, we will specifically configure 2 use cases:
 
-ethUrl <YOUR ETH URL - Infura, Alchemy, Other>
-ethPassword /root/.lpData/eth_secret.txt
-serviceAddr <YOUR IP ADDR>:8935
-network arbitrum-one-mainnet 
-orchestrator true
-transcoder true
-pricePerUnit 700
-monitor true
-v 6
-maxSessions 10
-autoAdjustPrice false
+1. Single Container combined Orchestrator/Transcoder
+2. Separate Containers for Orchestrator and Separate Transcoder
 
-## Docker Environment Variables (Optional)
+**livepeer.conf** - for this guide, this file will be stored in one of the docker volume created above. 
 
-## Standalone Orchestrator / Transcoder
-
- docker run -it -v /Users/mazup/Desktop/livepeer_stuff/docker-livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
+On a linux host system, you can find all volumes in the following location: /var/lib/docker/volumes/VOLUME-NAME/_data
 
 
-## Separate Orchestrator / Separate Transcoder
+## Configure Combined Orchestrator/Transcoder
+
+Next, create the livepeer.conf file
+
+- create the livepeer.conf
+  - **command**: touch /var/lib/docker/volumes/combinedLpData/_data/livepeer.conf
+- modify the newly created file to include the following settings:
+
+*ethUrl <YOUR ETH URL - Infura, Alchemy, Other>\
+ethPassword /root/.lpData/eth_secret.txt\
+serviceAddr <YOUR IP ADDR>:8935\
+network arbitrum-one-mainnet \
+orchestrator true\
+transcoder true\
+pricePerUnit 700\
+monitor true\
+v 6\
+maxSessions 10\
+autoAdjustPrice false*
+
+### Start The container 
+
+TODOD: describe foreground and background containers
+
+ docker run -it -v combinedLpData:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
+
+## Configure Standalone Orchestrator 
+
+## Configure Standalon Transcoder 
+
+### Start The containers
+
+ *docker run -it -v orchLpData:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf*
+
+  *docker run -it -v transLpData:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf*
+
 
 # Monitoring Docker and Livepeer
 
