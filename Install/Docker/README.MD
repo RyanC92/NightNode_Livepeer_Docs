@@ -15,6 +15,7 @@ Lastly, You should be familiar with the Livepeer configuration, deployment, and 
 
 Have the following configuration information ready:
 - Livepeer ETH Account
+  - json representation of your private key
 - RPC Url for Arbitrum
   - Infura, Alchemy, Public or others
 
@@ -57,20 +58,6 @@ If any of the following steps fail - YOU MUST STOP HERE! Please revisit the Live
   - *output* same output as nvidia-smi
   - if this fails, please review your NVIDIA / Docker setup.
 
-# Docker Volumes Setup
-
-Inside the Docker container, Livepeer will store the various files on the /root/.lpData directory. We must create a docker volume to persist file changes when containers restart.
-
-- **command**: docker volume create combinedLpData
-- **command**: docker volume create orchLpData
-- **command**: docker volume create transLpData
-- **command**: docker volume list
-  - *output*: \
-            **DRIVER VOLUME NAME \
-            local combinedLpData \
-             local orchLpData \
-             local transLpData**
-
 # Livepeer Configuration
 
 In this section, we will review the livepeer configuration file. I'd encourage you to review all the possible Livepeer configuration settings. For this guide, we will specifically configure 2 use cases:
@@ -78,17 +65,30 @@ In this section, we will review the livepeer configuration file. I'd encourage y
 1. Single Container combined Orchestrator/Transcoder
 2. Separate Containers for Orchestrator and Separate Transcoder
 
-**livepeer.conf** - for this guide, this file will be stored in one of the docker volume created above. 
+**livepeer.conf**
+All configuration for livepeer will be stored in the livepeer.conf file.
 
-On a linux host system, you can find all volumes in the following location: /var/lib/docker/volumes/VOLUME-NAME/_data
+create a directory that will contain your livepeer data.
+- **command**: mkdir -p /path/to/store/livepeer/
 
+Create the livepeer.conf file.
+- **command**: touch /path/to/store/livepeer/livepeer.conf
+
+Create the eth_secret.txt file.
+- **command**: touch /path/to/store/livepeer/eth_secret.conf
+
+Create the kestore and copy your ETH private key.
+- **command**: mkdir -p /path/to/store/livepeer/arbitrum/keystore
+
+- copy your json file to /path/to/store/livepeer/arbitrum/keystore/
 
 ## Configure Combined Orchestrator/Transcoder
 
-Next, create the livepeer.conf file
+Choose the template file that matches your Livepeer use case. 
+TODO add link to files from NightNode Github
 
-- create the livepeer.conf
-  - **command**: touch /var/lib/docker/volumes/combinedLpData/_data/livepeer.conf
+For our first use case, we will use the combined Orcheestrator / Transcoder Template.
+
 - modify the newly created file to include the following settings:
 
 *ethUrl <YOUR ETH URL - Infura, Alchemy, Other>\
@@ -105,9 +105,17 @@ autoAdjustPrice false*
 
 ### Start The container 
 
-TODOD: describe foreground and background containers
+TOOD: describe foreground and background containers
 
- docker run -it -v combinedLpData:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
+ docker run --rm --name livepeer-orch-trans -d /path/to/store/livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
+
+### View container logs
+
+docker logs livepeer-orch-trans -f
+
+### Stop The container 
+
+docker stop livepeer-orch-trans
 
 ## Configure Standalone Orchestrator 
 
@@ -115,18 +123,12 @@ TODOD: describe foreground and background containers
 
 ### Start The containers
 
- *docker run -it -v orchLpData:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf*
+ docker run --rm --name livepeer-orch -d /path/to/store/livepeer-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
 
-  *docker run -it -v transLpData:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf*
+ docker run --rm --name livepeer-trans -d /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf
 
 
 # Monitoring Docker and Livepeer
-
-# Handy Scripts
-
-- Github location for all scripts
-- create livepeer volumes and networks
-- start and stop each docker container
 
 # Reference Documentation
 
@@ -139,7 +141,5 @@ TODOD: describe foreground and background containers
   - https://docs.nvidia.com/ai-enterprise/deployment-guide/dg-docker.html
 
 # Contact the Author
-
 ## Twitter @MikeZupper
-
 ## Discord mikezupper#2551
