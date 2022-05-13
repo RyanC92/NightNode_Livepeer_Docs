@@ -1,15 +1,12 @@
 # Overview
 
-This guide will walk you through the Livepeer Orchestrator & Transcoder setup using Docker. The Livepeer team publishes containers to Docker Hub for all their respective services (Orchestrator, Transcoder, Broadcaster, Mist Server, Etc..).
+This guide will walk you through the Livepeer Orchestrator & Transcoder setup using Docker. The Livepeer team publishes images to Docker Hub.
 
-Please review the Livepeer Architecture for a better understanding of the Livepeer Network.
-
-
-TODO: put link to resource appendix heree 
+Please review the Livepeer Architecture for a better understanding of the Livepeer Network [links](#Reference+Documentation).
 
 # Prerequisites
 
-This guide assumes you are familiar with installing software on unix based systems. You should be comfortable with command line syntax, networks, firewalls, and containerized environments (specifically docker). You dont have to be an expert, but troubleshooting skills will come in handy.
+This guide assumes you are familiar with installing software on unix-based systems. You should be comfortable with command-line syntax, Networking, Firewalls, and containerized environments. You dont have to be an expert, but troubleshooting skills will come in handy.
 
 Lastly, You should be familiar with the Livepeer configuration, deployment, and running of an Orchestrator/Transcoder. I'd recommend reviewing the Linux and Windows installation guides prior to attempting to run Livepeer in Docker. 
 
@@ -21,11 +18,7 @@ Have the following configuration information ready:
 
 TODO: need to put community arb node here????
 
-TODO: add anchor to reeource appenddix for Tutorials for Livepeer (Titan node youtube and NightNode Github)
-
 # Verify Environment Prerequisites
-
-In order to have a smooth transition to Livepeer on Docker, several key verification steps are needed. 
 
 This guide was developed using:
 - Ubuntu Linux 20.04
@@ -35,12 +28,18 @@ This guide was developed using:
   - CUDA Version: 11.6  
 - Livepeer 0.5.29
 
+
 ## Verification Steps 
-Please run the following commands to make sure you Docker/Livepeer environment is ready for configuration.
+
+In order to have a smooth transition to Livepeer on Docker, several key verification steps are needed. 
+
+Please run the following commands to make sure you Docker/Livepeer environment meets the environment requirements.
 
 If any of the following steps fail - YOU MUST STOP HERE! Please revisit the Livepeer resources to ensure a NON-docker enviroment can run on this server before proceeding. 
 
 *If the version numbers don't match, you should be able to proceed assuming the Livepeer configuration works on this server without Docker.*
+
+This detects the docker version. This value may not be exact. If it does not match, you can proceed. The older the version, the more likely to have problems.
 
 ``` docker -v ```
 
@@ -71,53 +70,132 @@ In this section, we will review the livepeer configuration file. I'd encourage y
 1. Single Container combined Orchestrator/Transcoder
 2. Separate Containers for Orchestrator and Separate Transcoder
 
-## livepeer.conf
+## Livepeer Configuration Prep
 
-All configuration for livepeer will be stored in the livepeer.conf file.
+All configuration for livepeer will be stored in one folder. The livepeer.conf file, ETH keystore/secret, and arbitrum files will stored in this configuration folder. 
 
-create a directory that will contain your livepeer data.
+*****PROTECT THESE FILES AND FOLDER!!!!*****
+
+*****THEY CONTAIN SENSTIVE INFO!!!*****
+
+First, create the configuration directory that will contain your livepeer files.
 
 ```mkdir -p /path/to/store/livepeer/```
-
-Create the livepeer.conf file.
-
-``` touch /path/to/store/livepeer/livepeer.conf```
 
 Create the eth_secret.txt file.
 
 ``` touch /path/to/store/livepeer/eth_secret.conf```
 
+**make sure you modify this file and store your ETH account passphrase** 
+
+This is the password I used:
+
+``` LivePeerEthSecret! ```
+
 Create the kestore and copy your ETH private key.
+
 ```mkdir -p /path/to/store/livepeer/arbitrum/keystore```
 
-- copy your json file to ```/path/to/store/livepeer/arbitrum/keystore/```
+- copy your ETH Json keyfile to keystore directory
+
+```cp key.json /path/to/store/livepeer/arbitrum/keystore/```
+
+### (Optional) Create a ETH Account via Livepeer
+
+Run this command to generate the ETH account JSON file.
+
+a file should be created /
+
+```
+mkdir livepeer-eth-acct
+
+cd livepeer-eth-acct
+
+docker run --rm -it -v $(pwd):/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true 
+-orchSecret=LivePeerRocks! -network=arbitrum-mainnet -ethUrl=https://rpc.ankr.com/arbitrum  -ethPassword=LivePeerRocks! -v=6
+
+```
+
+It will attempt to start the Orchestrator. It will prompt you for the ETH Account Password (stored in eth_secret.txt). 
+
+In this example I used: ```LivePeerRocks!```
+
+```
+I0513 13:38:36.198424       1 livepeer.go:274] ***Livepeer is running on the arbitrum-mainnet network***
+I0513 13:38:36.198959       1 livepeer.go:287] Creating data dir: /root/.lpData/arbitrum-mainnet
+I0513 13:38:36.210318       1 db.go:377] Initialized DB node
+I0513 13:38:36.779685       1 accountmanager.go:51] No Ethereum account found. Creating a new account
+I0513 13:38:36.780276       1 accountmanager.go:52] This process will create a new Ethereum account for this Livepeer node
+I0513 13:38:36.780596       1 accountmanager.go:53] Please enter a passphrase to encrypt the Private Keystore file for the Ethereum account.
+I0513 13:38:36.780897       1 accountmanager.go:54] This process will ask for this passphrase every time it is launched
+I0513 13:38:36.781209       1 accountmanager.go:55] (no characters will appear in Terminal when the passphrase is entered)
+Passphrase: 
+Repeat passphrase: 
+I0513 13:38:50.252913       1 accountmanager.go:72] Using Ethereum account: 0x1483C047d9fE54a26356B82fcAc79209f4c793Ec
+I0513 13:38:51.010233       1 accountmanager.go:106] Unlocked ETH account: 0x1483C047d9fE54a26356B82fcAc79209f4c793Ec
+I0513 13:38:51.013278       1 client.go:195] Controller: 0x0000000000000000000000000000000000000000
+E0513 13:38:52.049777       1 client.go:199] Error getting LivepeerToken address: execution reverted
+E0513 13:38:52.050790       1 livepeer.go:510] Failed to set gas info on Livepeer Ethereum Client: execution reverted
+I0513 13:38:52.051839       1 db.go:382] Closing DB
+```
+
+```
+ls arbitrum-mainnet/keystore/*
+```
+
+You will see output like this:
+
+```
+arbitrum-mainnet/keystore/UTC--2022-05-13T13-38-48.305596618Z--1483c047d9fe54a26356b82fcac79209f4c793ec
+```
+
+The file name starting with UTC--[DATE]--[ETH ACCOUNT ADDR]
+
+```
+1483c047d9fe54a26356b82fcac79209f4c793ec
+```
+
+the ETH Account should be saved for your Livepeer configuration. 
+
+The ETH Account will be as follows. 
+*Take note of the 0x that was appended to the front of the account.*
+```
+0x1483c047d9fe54a26356b82fcac79209f4c793ec
+```
+
 
 ## Configure Combined Orchestrator/Transcoder
 
 Choose the template file that matches your Livepeer use case. 
-TODO add link to files from NightNode Github
 
-For our first use case, we will use the combined Orcheestrator / Transcoder Template.
+For our first use case, we will use the combined Orchestrator / Transcoder Template.
 
-- modify the newly created file to include the following settings:
+Download [livepeer_orchestratorcombo.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_orchestratorcombo.conf) to use as a starting point.
 
-*ethUrl <YOUR ETH URL - Infura, Alchemy, Other>\
-ethPassword /root/.lpData/eth_secret.txt\
-serviceAddr <YOUR IP ADDR>:8935\
-network arbitrum-one-mainnet \
-orchestrator true\
-transcoder true\
-pricePerUnit 700\
-monitor true\
-v 6\
-maxSessions 10\
-autoAdjustPrice false*
+- rename the template file to *livepeer.conf*
+- modify the file to include your environment settings.
 
-### Start The container 
+These are the settings I used:
 
-TOOD: describe foreground and background containers
+```
+orchestrator true
+transcoder true
+network arbitrum-one-mainnet
+ethUrl arb1.arbitrum.io/rpc
+ethPassword /root/.lpData/eth_secret.txt
+serviceAddr <IP:PORT>
+cliAddr <IP:PORT>
+maxGasPrice 5000000000
+pricePerUnit 900
+nvidia all
+maxSessions 10
+monitor
+v 6
+```
 
-``` docker run --rm --gpus all --name livepeer-orch-trans -d -v /path/to/store/livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf ```
+# Run The Orchestrator/Transcoder!
+
+``` docker run --rm --gpus all --name livepeer-orch-trans -p 8935:8935 -p 7935:7935 -d -v /path/to/store/livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf ```
 
 ### View container logs
 
@@ -129,15 +207,26 @@ TOOD: describe foreground and background containers
 
 ## Configure Standalone Orchestrator 
 
+[livepeer_orchestrator.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_orchestrator.conf) 
+
 ## Configure Standalon Transcoder 
 
-### Start The containers
+[livepeer_transcoder.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_transcoder.conf) 
 
- ```docker run --rm --name livepeer-orch -d -v /path/to/store/livepeer-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf```
 
- ```docker run --rm --gpus all --name livepeer-trans -d -v /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+## Run The Standalone Orchestrator!
 
-# Monitoring Docker and Livepeer
+ ```docker run --rm  --name livepeer-orch -p 8935:8935 -p 7935:7935 -d -v /path/to/store/livepeer-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf```
+
+## Run The Standalone Transcoder!
+
+ ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+
+# Monitoring Livepeer
+
+ ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935  -d -v /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+
+  ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
 # Reference Documentation
 
