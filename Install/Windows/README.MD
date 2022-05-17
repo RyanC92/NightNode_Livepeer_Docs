@@ -277,7 +277,9 @@ scrape_configs:
 Now that you have modified the files necessary to run these programs (Livepeer .conf files, Prometheus.yml file)
 
 You can either run the individual launch batch files for Livepeer and Prometheus
+
 ![image](https://user-images.githubusercontent.com/15055337/168826285-2aaa3738-39bb-407c-ae92-e82f115ee4cb.png)
+
 or run the ```LaunchScript.Bat``` file. *Please note, you may need to modify the batch file to point it to the specific launch files you want to run. For Example: ```Orchestrator.bat```,```Transcoder - GPU 1.bat``` and ```prometheus.bat```)*
 Grafana will launch automatically and run in the background as a service after the install is complete.
 
