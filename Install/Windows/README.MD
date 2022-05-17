@@ -12,7 +12,7 @@
   - [For Orchestrators](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-orchestrators)
   - [For Orchestrator/Transcoder Combo](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-orchestratortranscoder-combo)
   - [For Transcoders](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-transcoders)
-  - [Livepeer Flags](
+  - [Livepeer Flags](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Windows/README.MD#livepeer-flags)
 - [Installation - Part 2 - Grafana](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-2-grafana)
 - [Installation - Part 3 - Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-3-prometheus)
 - [Running Livepeer, Grafana, Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#running-livepeer-grafana-prometheus)
