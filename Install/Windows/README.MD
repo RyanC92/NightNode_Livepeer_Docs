@@ -14,8 +14,8 @@
   - [For Transcoders](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-transcoders)
 - [Installation - Part 2 - Grafana](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-2-grafana)
 - [Installation - Part 3 - Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-3-prometheus)
-- [Running Livepeer, Grafana, Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/edit/main/Install/Windows/README.MD#running-livepeer-grafana-prometheus)
-- [Feedback](https://github.com/NightWolf92/NightNode_Livepeer_Docs/edit/main/Install/Windows/README.MD#feedback)  
+- [Running Livepeer, Grafana, Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#running-livepeer-grafana-prometheus)
+- [Feedback](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#feedback)  
   
 # Installation (Part 1: Livepeer)
 
