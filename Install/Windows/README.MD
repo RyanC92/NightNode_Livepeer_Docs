@@ -12,6 +12,7 @@
   - [For Orchestrators](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-orchestrators)
   - [For Orchestrator/Transcoder Combo](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-orchestratortranscoder-combo)
   - [For Transcoders](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-transcoders)
+  - [Livepeer Flags](
 - [Installation - Part 2 - Grafana](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-2-grafana)
 - [Installation - Part 3 - Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-3-prometheus)
 - [Running Livepeer, Grafana, Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#running-livepeer-grafana-prometheus)
@@ -23,7 +24,7 @@
 
 Download the latest release located [Here](https://github.com/NightWolf92/NightNode_Livepeer_Docs/releases/tag/Latest)
 
-The Livepeer_Setup.exe file will prompt if you want to install this for yourself, or all users. (If you choose for yourself, it installs it into appData, all users would be ```C:\Program Files(x86)\``` by default)
+The Livepeer_Setup.exe file will prompt if you want to install this for yourself, or all users. (If you choose for yourself, it installs it into appData, all users would be ```C:\Livepeer\``` by default)
 
 The installer will install the files to the stated install directory, providing default templates, config files and launch batch files that would require minimal modification to get started. It will also download the latest livepeer release from https://github.com/livepeer/go-livepeer
 
@@ -31,7 +32,7 @@ The installer will install the files to the stated install directory, providing 
 
 ### Windows
 
-Navigate to the install directory that was selected, by default it is ```"C:\Program Files(x86)\Livepeer\"```. Inside the folder are a list of files that can be modified, please do so to fit your setup specifications.
+Navigate to the install directory that was selected, by default it is ```"C:\Livepeer\"```. Inside the folder are a list of files that can be modified, please do so to fit your setup specifications.
 
 ```
 livepeer_orchestrator.conf (This will just run the O)
@@ -216,6 +217,134 @@ v 6
 #####################################
 ```
 
+# Livepeer Flags
+
+
+``` 
+Usage of livepeer:
+  authWebhookUrl string
+        RTMP authentication webhook URL
+  autoAdjustPrice
+        Enable/disable automatic price adjustments based on the overhead for redeeming tickets (default true)
+  blockPollingInterval int
+        Interval in seconds at which different blockchain event services poll for blocks (default 5)
+  broadcaster
+        Set to true to be a broadcaster
+  cliAddr string
+        Address to bind for  CLI commands (default "127.0.0.1:7935")
+  config string
+        Config file in the format 'key value', flags and env vars take precedence over the config file
+  currentManifest
+        Expose the currently active ManifestID as "/stream/current.m3u8"
+  datadir string
+        Directory that data is stored in
+  depositMultiplier int
+        The deposit multiplier used to determine max acceptable faceValue for PM tickets (default 1)
+  detectionWebhookUrl string
+        (Experimental) Detection results callback URL
+  ethAcctAddr string
+        Existing Eth account address
+  ethController string
+        Protocol smart contract address
+  ethKeystorePath string
+        Path for the Eth Key
+  ethOrchAddr string
+        ETH address of an onchain registered orchestrator
+  ethPassword string
+        Password for existing Eth account address
+  ethUrl string
+        Ethereum node JSONRPC URL
+  gasLimit int
+        Gas limit for ETH transactions
+  httpAddr string
+        Address to bind for HTTP commands
+  httpIngest
+        Set to true to enable HTTP ingest (default true)
+  initializeRound
+        Set to true if running as a transcoder and the node should automatically initialize new rounds
+  j    Print application info as json
+  localVerify
+        Set to true to enable local verification i.e. pixel count and signature verification. (default true)
+  maxAttempts int
+        Maximum transcode attempts (default 3)
+  maxGasPrice int
+        Maximum gas price (priority fee + base fee) for ETH transactions in wei, 40 Gwei = 40000000000
+  maxPricePerUnit int
+        The maximum transcoding price (in wei) per 'pixelsPerUnit' a broadcaster is willing to accept. If not set explicitly, broadcaster is willing to accept ANY price
+  maxSessions int
+        Maximum number of concurrent transcoding sessions for Orchestrator, maximum number or RTMP streams for Broadcaster, or maximum capacity for transcoder (default 10)
+  maxTicketEV string
+        The maximum acceptable expected value for PM tickets (default "3000000000000")
+  maxTransactionReplacements int
+        Number of times to automatically replace pending Ethereum transactions (default 1)
+  metadataAmqpExchange string
+        Name of AMQP exchange to send operation metadata (default "lp_golivepeer_metadata")
+  metadataPublishTimeout duration
+        Max time to wait in background for publishing operation metadata events (default 1s)
+  metadataQueueUri string
+        URI for message broker to send operation metadata
+  metricsClientIP
+        Set to true to expose client's IP in metrics
+  metricsPerStream
+        Set to true to group performance metrics per stream
+  minGasPrice int
+        Minimum gas price (priority fee + base fee) for ETH transactions in wei, 10 Gwei = 10000000000
+  monitor
+        Set to true to send performance metrics
+  network string
+        Network to connect to (default "offchain")
+  nvidia string
+        Comma-separated list of Nvidia GPU device IDs (or "all" for all available devices)
+  objectStore string
+        url of primary object store
+  orchAddr string
+        Comma-separated list of orchestrators to connect to
+  orchSecret string
+        Shared secret with the orchestrator as a standalone transcoder
+  orchWebhookUrl string
+        Orchestrator discovery callback URL
+  orchestrator
+        Set to true to be an orchestrator
+  pixelsPerUnit int
+        Amount of pixels per unit. Set to '> 1' to have smaller price granularity than 1 wei / pixel (default 1)
+  pricePerUnit int
+        The price per 'pixelsPerUnit' amount pixels
+  recordStore string
+        url of object store for recordings
+  redeemer
+        Set to true to run a ticket redemption service
+  redeemerAddr string
+        URL of the ticket redemption service to use
+  reward
+        Set to true to run a reward service
+  rtmpAddr string
+        Address to bind for RTMP commands (default "127.0.0.1:1935")
+  sceneClassificationModelPath string
+        Path to scene classification model
+  selectRandFreq float
+        Frequency to randomly select unknown orchestrators (on-chain mode only) (default 0.3)
+  serviceAddr string
+        Orchestrator only. Overrides the on-chain serviceURI that broadcasters can use to contact this node; may be an IP or hostname.
+  testTranscoder
+        Test Nvidia GPU transcoding at startup (default true)
+  ticketEV string
+        The expected value for PM tickets (default "1000000000000")
+  transactionTimeout duration
+        Amount of time to wait for an Ethereum transaction to confirm before timing out (default 5m0s)
+  transcoder
+        Set to true to be a transcoder
+  transcodingOptions string
+        Transcoding options for broadcast job, or path to json config (default "P240p30fps16x9,P360p30fps16x9")
+  v string
+        Log verbosity.  {4|5|6}
+  verifierPath string
+        Path to verifier shared volume
+  verifierUrl string
+        URL of the verifier to use
+  version
+        Print out the version
+```
+
 
 # Installation (Part 2: Grafana)
 
@@ -228,7 +357,7 @@ After grafana is installed navigate to ```localhost:3000``` to verify that grafa
 
 # Installation (Part 3: Prometheus)
 
-Included as well in the install for livepeer, the installer will go to prometheus and download the zip and extract it. The files get extracted to C:\prometheus-2.35.0.windows-amd64\
+Included as well in the install for livepeer, the installer will go to prometheus and download the zip and extract it. The files get extracted to the install directory of Livepeer
 
 The batch file within the livepeer installer folder is set to point to this. Please utilize the the ```prometheus.yml``` file located in the livepeer install folder. 
 
