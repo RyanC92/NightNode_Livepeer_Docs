@@ -14,7 +14,8 @@
   - [For Transcoders](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#for-transcoders)
 - [Installation - Part 2 - Grafana](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-2-grafana)
 - [Installation - Part 3 - Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-3-prometheus)
-  
+- [Running Livepeer, Grafana, Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#running-livepeer-grafana-prometheus)
+- [Feedback](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#feedback)  
   
 # Installation (Part 1: Livepeer)
 
@@ -230,6 +231,59 @@ After grafana is installed navigate to ```localhost:3000``` to verify that grafa
 Included as well in the install for livepeer, the installer will go to prometheus and download the zip and extract it. The files get extracted to C:\prometheus-2.35.0.windows-amd64\
 
 The batch file within the livepeer installer folder is set to point to this. Please utilize the the ```prometheus.yml``` file located in the livepeer install folder. 
+
+Please make sure to modify the ```prometheus.yml``` file in the livepeer folder to fit your ports/IPs.
+
+*The prometheus and GPU localhost IPs can be modified to be your external IP and as such will make it externally accessible.*
+
+```# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+
+  # The prometheus and GPU localhost IPs can be modified to be your external IP and as such will make it externally accessible.
+  
+  - job_name: 'prometheus'
+    
+    static_configs:
+    
+    - targets: ['localhost:9090']
+  
+  - job_name: 'gpu'
+    
+    static_configs:
+    
+    - targets: ['localhost:9101']
+  
+  - job_name: 'livepeer'
+    
+    metrics_path: /metrics
+    
+    static_configs:
+    
+    - targets: ['localhost:7935']
+```
+
+# Running Livepeer, Grafana, Prometheus
+
+Now that you have modified the files necessary to run these programs (Livepeer .conf files, Prometheus.yml file)
+
+You can either run the individual launch batch files for Livepeer and Prometheus
+
+![image](https://user-images.githubusercontent.com/15055337/168826285-2aaa3738-39bb-407c-ae92-e82f115ee4cb.png)
+
+or run the ```LaunchScript.Bat``` file. *Please note, you may need to modify the batch file to point it to the specific launch files you want to run. For Example: ```Orchestrator.bat```,```Transcoder - GPU 1.bat``` and ```prometheus.bat```)*
+Grafana will launch automatically and run in the background as a service after the install is complete.
+
+You can connect to the interface by using ```localhost:3000``` in your browser to start. 
 
 # Feedback
 
