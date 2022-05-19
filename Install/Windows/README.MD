@@ -21,7 +21,7 @@
   
 # Installation (Part 1: Livepeer)
 
-Note: This guide assumes the user has some knowledge of livepeer and its software. Please reference Livepeers official documentation if needed.
+Note: Please Note this guide is not a one and done solutions, assumes the user has some knowledge of livepeer and its software and requires limited modification of configuration files to work, these configuration files are located in the install directory chosen during install. Please reference Livepeers official documentation if needed.
 
 https://livepeer.com/docs/guides
 
