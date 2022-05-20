@@ -38,41 +38,44 @@ Lastly, You should be familiar with the Livepeer configuration, deployment, and 
 
 We will follow the prescribed steps found on [docker.com](https://docs.docker.com/engine/install/ubuntu/). All of the steps in this section will require root access. I'd advise logging in as root, but the use of sudo is sufficient.
 
-remove older version of docker:
+remove older version of docker
 
+As the root user (or sudo), run the following:
 ```
-sudo apt-get remove docker docker-engine docker.io containerd runc
+apt-get remove docker docker-engine docker.io containerd runc
 ```
 
 install the Docker repo for Ubuntu
 
+As the root user (or sudo), run the following:
 ```
-sudo apt-get update
+apt-get update
 
-sudo apt-get install ca-certificates curl net-tools net-tools sysstat gnupg lsb-release
+apt-get install ca-certificates curl wget net-tools net-tools sysstat gnupg lsb-release
 
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-sudo echo \
+echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
 
 Once the repo is installed... update the repo, install docker, enable docker to autostart on boot
 
+As the root user (or sudo), run the following:
 ```
-sudo apt-get update
+apt-get update
 
-sudo apt-get install docker-ce docker-ce-cli containerd.io
+apt-get install docker-ce docker-ce-cli containerd.io
 
-sudo systemctl --now enable docker
+systemctl --now enable docker
 ```
 
 This document is *NOT* meant to be a guide on Linux or Securing Linux applications. Having said that, I would advise running the docker containers as a non-root user. 
 
 To enable this, we will need to create a new user and assign it to the docker group. For this installation, we will use the user: livepeer
 
-As the root user (or use sudo)
+As the root user (or sudo), run the following:
 ``` 
 mkdir /home/livepeer
 useradd -g docker livepeer
@@ -83,26 +86,45 @@ usermod -s /bin/bash livepeer
 
 #  STEP 2: Install NVIDIA Docker
 
-The NVIDIA docker installation links are listed below. This section walk through the steps needed to install NVIDIA on Ubuntu.
-The steps include, add the NVIDIA driver repo to Ubuntu, update the repo, install the nvidia-docker2 driver, and restart docker.
+This section walks through the steps needed to install NVIDIA Drivers on Ubuntu and ensure X11 graphics mode is off by default (optional).
 
-As the root user (or sudo),
+As the root user (or sudo), run the following:
 ```
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
-            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+apt-get install -y nvidia-driver-510
 
-apt update
-apt-get install -y nvidia-docker2
-systemctl restart docker
+# Optional Step
+systemctl set-default multi-user
 ```
-
 
 #  STEP 3: Patch NVIDIA Driver
 
+This step will download the NVIDA patches required to run Livepeer. You can read more about it on [Github](https://raw.githubusercontent.com/keylase/nvidia-patch).
+
+
+As the root user (or sudo), run the following:
+```
+wget https://raw.githubusercontent.com/keylase/nvidia-patch/master/patch.sh
+chmod a+x ./patch.sh
+./patch.sh
+
+wget https://raw.githubusercontent.com/keylase/nvidia-patch/master/patch-fbc.sh
+chmod a+x ./patch-fbc.sh
+./patch-fbc.sh
+
+```
+
 #  STEP 4: Install NVIDIA Container Runtime
+
+This section walks through the steps needed to install NVIDIA Docker Runtime. The steps required are: install the NVIDIA Docker repo, update the repo, install nvidia-docker2, restart docker, and run the docker NVIDIA-SMI test container.
+
+As the root user (or sudo), run the following:
+```
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)       && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg       && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list |             sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' |             sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+apt-get update
+apt-get install -y nvidia-docker2
+systemctl restart docker
+docker run --rm --gpus all nvidia/cuda:11.0-base nvidia-smi
+```
 
 ## Verification Steps 
 
@@ -143,7 +165,7 @@ This detects the docker version. This value may not be exact. If it does not mat
 In this section, we will review the livepeer configuration file. I'd encourage you to review all the possible Livepeer configuration settings. For this guide, we will specifically configure 2 use cases:
 
 1. Single Container combined Orchestrator/Transcoder
-2. Separate Containers for Orchestrator and Separate Transcoder
+2. One Container for Standalone Orchestrator and One Container for Remote Transcoder
 
 ## Livepeer Configuration Prep
 
