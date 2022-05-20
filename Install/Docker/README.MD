@@ -4,7 +4,7 @@ This guide will walk you through the Livepeer Orchestrator & Transcoder setup us
 
 1. Docker
 2. NVIDIA Drivers
-3. NVIDA Patch
+3. NVIDA Driver Patch
 4. NVIDIA Container Runtime
 5. Livepeer Setup
 6. Multiple Modes to Run Livepeer
@@ -19,69 +19,6 @@ Please review the Livepeer Architecture for a better understanding of the Livepe
 
 This guide assumes you are familiar with installing software on unix-based systems. You should be comfortable with command-line syntax, Networking, Firewalls, and containerized environments. You dont have to be an expert, but troubleshooting skills will come in handy.
 
-Lastly, You should be familiar with the Livepeer configuration, deployment, and running of an Orchestrator/Transcoder. I'd recommend reviewing the Linux and Windows installation guides prior to attempting to run Livepeer in Docker. 
-
-Have access to an Arbitrum RPC URL. This is required to run Livepeer. You can use any RPC URL, but some of the commonly used services are Infura, Alchemy, or Self Hosted.
-
-TODO: need to put community arb node here????
-
-# Install Docker
-
-This section covers the docker installation. On Ubuntu Linux, we will follow the docker prescribed steps found on [docker.com](https://docs.docker.com/engine/install/ubuntu/)
-
-remove older version of docker:
-
-```
-sudo apt-get remove docker docker-engine docker.io containerd runc
-```
-
-install the docker reepo for ubuntu
-
-```
-sudo apt-get update
-
-sudo apt-get install ca-certificates curl net-tools gnupg lsb-release
-```
-
-TODO: some linux installs have these keyrings... what to do?????
-
-````
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-
-sudo echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-sudo apt-get update
-
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
-
-sudo systemctl --now enable docker
-```
-
-allow a non-root user to run docker containers
-
-``` useradd -g docker YOUR_LINUX_USER ```
-
-# Install NVIDIA Docker
-
-https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
-
-```
-sudo distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
-      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
-      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
-            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
-            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-
-sudo apt update
-sudo apt-get install -y nvidia-docker2
-sudo systemctl restart docker
-
-```
-
-# Verify Environment Prerequisites
-
 This guide was developed using:
 - Ubuntu Linux 20.04
 - Docker 20.10.14
@@ -89,6 +26,83 @@ This guide was developed using:
   - Driver Version: 510.60.02
   - CUDA Version: 11.6  
 - Livepeer 0.5.29
+
+Have access to an Arbitrum RPC URL. This is required to run Livepeer. You can use any RPC URL, but some of the commonly used services are Infura, Alchemy, or Self Hosted.
+
+TODO: need to put community arb node here????
+
+Lastly, You should be familiar with the Livepeer configuration, deployment, and running of an Orchestrator/Transcoder. I'd recommend reviewing the Linux and Windows installation guides prior to attempting to run Livepeer in Docker. 
+
+
+# STEP 1: Install Docker
+
+We will follow the prescribed steps found on [docker.com](https://docs.docker.com/engine/install/ubuntu/). All of the steps in this section will require root access. I'd advise logging in as root, but the use of sudo is sufficient.
+
+remove older version of docker:
+
+```
+sudo apt-get remove docker docker-engine docker.io containerd runc
+```
+
+install the Docker repo for Ubuntu
+
+```
+sudo apt-get update
+
+sudo apt-get install ca-certificates curl net-tools net-tools sysstat gnupg lsb-release
+
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+sudo echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+Once the repo is installed... update the repo, install docker, enable docker to autostart on boot
+
+```
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+sudo systemctl --now enable docker
+```
+
+This document is *NOT* meant to be a guide on Linux or Securing Linux applications. Having said that, I would advise running the docker containers as a non-root user. 
+
+To enable this, we will need to create a new user and assign it to the docker group. For this installation, we will use the user: livepeer
+
+As the root user (or use sudo)
+``` 
+mkdir /home/livepeer
+useradd -g docker livepeer
+chown -Rf livepeer.docker /home/livepeer
+usermod -d /home/livepeer livepeer
+usermod -s /bin/bash livepeer
+```
+
+#  STEP 2: Install NVIDIA Docker
+
+The NVIDIA docker installation links are listed below. This section walk through the steps needed to install NVIDIA on Ubuntu.
+The steps include, add the NVIDIA driver repo to Ubuntu, update the repo, install the nvidia-docker2 driver, and restart docker.
+
+As the root user (or sudo),
+```
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+apt update
+apt-get install -y nvidia-docker2
+systemctl restart docker
+```
+
+
+#  STEP 3: Patch NVIDIA Driver
+
+#  STEP 4: Install NVIDIA Container Runtime
 
 
 ## Verification Steps 
@@ -110,7 +124,7 @@ This detects the docker version. This value may not be exact. If it does not mat
 ``` docker info```
 
   - Look for the **Runtimes** section and ensure you see the nvidia entry listed
-  - **output** : *Runtimes: runc io.containerd.runc.v2 io.containerd.runtime.v1.linux **nvidia** .*
+  - *Runtimes: runc io.containerd.runc.v2 io.containerd.runtime.v1.linux **nvidia** .*
 
 ``` nvidia-smi```
   
@@ -122,19 +136,10 @@ This detects the docker version. This value may not be exact. If it does not mat
 
 ```sudo docker run --gpus all nvidia/cuda:11.0-base ```
 
-  - *output* same as nvidia-smi
+  - should have the same output as nvidia-smi
   - if this fails, please review your NVIDIA / Docker setup.
 
-
-# Create Livepeer User
-
-``` mkdir /home/livepeer
-useradd -g docker livepeer
-chown -Rf livepeer.docker /home/livepeer
-usermod -d /home/livepeer livepeer
-usermod -s /bin/bash livepeer
-```
-# Livepeer Configuration
+#  STEP 5: Livepeer Setup
 
 In this section, we will review the livepeer configuration file. I'd encourage you to review all the possible Livepeer configuration settings. For this guide, we will specifically configure 2 use cases:
 
@@ -171,7 +176,7 @@ Create the kestore and copy your ETH private key.
 
 ```cp key.json /home/livepeer/orch/arbitrum/keystore/```
 
-### (Optional) Create a ETH Account via Livepeer
+## Create a ETH Account via Livepeer
 
 Run this command to generate the ETH account JSON file.
 
@@ -187,7 +192,6 @@ cd livepeer-eth-acct
 docker run --rm -it -v $(pwd):/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true \
 -orchSecret=LivePeerRocks! -network=arbitrum-mainnet -ethUrl=https://rpc.ankr.com/arbitrum \
 -ethPassword=LivePeerRocks! -v=6
-
 ```
 
 It will attempt to start the Orchestrator. It will prompt you for the ETH Account Password (stored in eth_secret.txt). 
@@ -212,6 +216,8 @@ E0513 13:38:52.049777       1 client.go:199] Error getting LivepeerToken address
 E0513 13:38:52.050790       1 livepeer.go:510] Failed to set gas info on Livepeer Ethereum Client: execution reverted
 I0513 13:38:52.051839       1 db.go:382] Closing DB
 ```
+
+
 ```
 chown -Rf livepeer.docker /home/livepeer
 
@@ -235,6 +241,7 @@ the ETH Account should be saved for your Livepeer configuration.
 
 The ETH Account will be as follows. 
 *Take note of the 0x that was appended to the front of the account.*
+
 ```
 0x1483c047d9fe54a26356b82fcac79209f4c793ec
 ```
@@ -246,6 +253,8 @@ cp /home/livepeer/orch/livepeer-eth-acct/arbitrum-mainnet/keystore/YOUR_UTC_FILE
 
 ls -al /home/livepeer/orch/*
 ```
+
+#  STEP 5: Multiple Modes to Run Livepeer  
 
 ## Configure Combined Orchestrator/Transcoder
 
@@ -312,14 +321,11 @@ v 6
   ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
 # Reference Documentation
-
 - Livepeer.org
-- Livepeer.com
-- Mist Server
 - Discord
-- Curated Livepeer Links (https://livepeer.tools)
-- NVIDIA docker setup
-  - https://docs.nvidia.com/ai-enterprise/deployment-guide/dg-docker.html
+- NVIDIA Reference Links
+  - [Docker Nividia Install](https://docs.nvidia.com/ai-enterprise/deployment-guide/dg-docker.html)
+  - [Container Runtine Install](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
 
 # Contact the Author
 ## Twitter @MikeZupper
