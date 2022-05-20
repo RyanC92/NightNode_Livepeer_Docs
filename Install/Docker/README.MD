@@ -220,8 +220,6 @@ I0513 13:38:52.051839       1 db.go:382] Closing DB
 
 ```
 chown -Rf livepeer.docker /home/livepeer
-
-```
 ls arbitrum-mainnet/keystore/*
 ```
 
