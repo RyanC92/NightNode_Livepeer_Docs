@@ -1,6 +1,17 @@
 # Overview
 
-This guide will walk you through the Livepeer Orchestrator & Transcoder setup using Docker. The Livepeer team publishes images to Docker Hub.
+This guide will walk you through the Livepeer Orchestrator & Transcoder setup using Docker. The installation will be based on Ubuntu Linux and includes the following steps:
+
+1. Docker
+2. NVIDIA Drivers
+3. NVIDA Patch
+4. NVIDIA Container Runtime
+5. Livepeer Setup
+6. Multiple Modes to Run Livepeer
+7. Prometheus Monitoring for Livepeer
+8. Grafana Reporting for Livepeer
+
+All docker images used in this guide are published to Docker Hub. 
 
 Please review the Livepeer Architecture for a better understanding of the Livepeer Network [links](#Reference+Documentation).
 
@@ -10,13 +21,64 @@ This guide assumes you are familiar with installing software on unix-based syste
 
 Lastly, You should be familiar with the Livepeer configuration, deployment, and running of an Orchestrator/Transcoder. I'd recommend reviewing the Linux and Windows installation guides prior to attempting to run Livepeer in Docker. 
 
-Have the following configuration information ready:
-- Livepeer ETH Account
-  - json representation of your private key
-- RPC Url for Arbitrum
-  - Infura, Alchemy, Public or others
+Have access to an Arbitrum RPC URL. This is required to run Livepeer. You can use any RPC URL, but some of the commonly used services are Infura, Alchemy, or Self Hosted.
 
 TODO: need to put community arb node here????
+
+# Install Docker
+
+This section covers the docker installation. On Ubuntu Linux, we will follow the docker prescribed steps found on [docker.com](https://docs.docker.com/engine/install/ubuntu/)
+
+remove older version of docker:
+
+```
+sudo apt-get remove docker docker-engine docker.io containerd runc
+```
+
+install the docker reepo for ubuntu
+
+```
+sudo apt-get update
+
+sudo apt-get install ca-certificates curl net-tools gnupg lsb-release
+```
+
+TODO: some linux installs have these keyrings... what to do?????
+
+````
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+sudo echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+sudo systemctl --now enable docker
+```
+
+allow a non-root user to run docker containers
+
+``` useradd -g docker YOUR_LINUX_USER ```
+
+# Install NVIDIA Docker
+
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+
+```
+sudo distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+      && curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+      && curl -s -L https://nvidia.github.io/libnvidia-container/$distribution/libnvidia-container.list | \
+            sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+            sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+
+sudo apt update
+sudo apt-get install -y nvidia-docker2
+sudo systemctl restart docker
+
+```
 
 # Verify Environment Prerequisites
 
@@ -63,6 +125,15 @@ This detects the docker version. This value may not be exact. If it does not mat
   - *output* same as nvidia-smi
   - if this fails, please review your NVIDIA / Docker setup.
 
+
+# Create Livepeer User
+
+``` mkdir /home/livepeer
+useradd -g docker livepeer
+chown -Rf livepeer.docker /home/livepeer
+usermod -d /home/livepeer livepeer
+usermod -s /bin/bash livepeer
+```
 # Livepeer Configuration
 
 In this section, we will review the livepeer configuration file. I'd encourage you to review all the possible Livepeer configuration settings. For this guide, we will specifically configure 2 use cases:
@@ -80,11 +151,11 @@ All configuration for livepeer will be stored in one folder. The livepeer.conf f
 
 First, create the configuration directory that will contain your livepeer files.
 
-```mkdir -p /path/to/store/livepeer/```
+```mkdir -p /home/livepeer/orch/```
 
 Create the eth_secret.txt file.
 
-``` touch /path/to/store/livepeer/eth_secret.conf```
+``` touch /home/livepeer/orch/eth_secret.txt```
 
 **make sure you modify this file and store your ETH account passphrase** 
 
@@ -94,15 +165,17 @@ This is the password I used:
 
 Create the kestore and copy your ETH private key.
 
-```mkdir -p /path/to/store/livepeer/arbitrum/keystore```
+```mkdir -p /home/livepeer/orch/arbitrum/keystore```
 
 - copy your ETH Json keyfile to keystore directory
 
-```cp key.json /path/to/store/livepeer/arbitrum/keystore/```
+```cp key.json /home/livepeer/orch/arbitrum/keystore/```
 
 ### (Optional) Create a ETH Account via Livepeer
 
 Run this command to generate the ETH account JSON file.
+
+this step will prompt you 3 times. you are creating a new ETH account addr, keystore, and passphrase
 
 a file should be created /
 
@@ -111,8 +184,9 @@ mkdir livepeer-eth-acct
 
 cd livepeer-eth-acct
 
-docker run --rm -it -v $(pwd):/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true 
--orchSecret=LivePeerRocks! -network=arbitrum-mainnet -ethUrl=https://rpc.ankr.com/arbitrum  -ethPassword=LivePeerRocks! -v=6
+docker run --rm -it -v $(pwd):/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true \
+-orchSecret=LivePeerRocks! -network=arbitrum-mainnet -ethUrl=https://rpc.ankr.com/arbitrum \
+-ethPassword=LivePeerRocks! -v=6
 
 ```
 
@@ -138,6 +212,8 @@ E0513 13:38:52.049777       1 client.go:199] Error getting LivepeerToken address
 E0513 13:38:52.050790       1 livepeer.go:510] Failed to set gas info on Livepeer Ethereum Client: execution reverted
 I0513 13:38:52.051839       1 db.go:382] Closing DB
 ```
+```
+chown -Rf livepeer.docker /home/livepeer
 
 ```
 ls arbitrum-mainnet/keystore/*
@@ -163,6 +239,13 @@ The ETH Account will be as follows.
 0x1483c047d9fe54a26356b82fcac79209f4c793ec
 ```
 
+neeed to copy the files to the right folder
+
+```
+cp /home/livepeer/orch/livepeer-eth-acct/arbitrum-mainnet/keystore/YOUR_UTC_FILE.json /home/livepeer/orch/arbitrum/keystore/
+
+ls -al /home/livepeer/orch/*
+```
 
 ## Configure Combined Orchestrator/Transcoder
 
@@ -195,7 +278,7 @@ v 6
 
 # Run The Orchestrator/Transcoder!
 
-``` docker run --rm --gpus all --name livepeer-orch-trans -p 8935:8935 -p 7935:7935 -d -v /path/to/store/livepeer/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf ```
+``` docker run --rm --gpus all --name livepeer-orch-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf ```
 
 ### View container logs
 
@@ -216,17 +299,17 @@ v 6
 
 ## Run The Standalone Orchestrator!
 
- ```docker run --rm  --name livepeer-orch -p 8935:8935 -p 7935:7935 -d -v /path/to/store/livepeer-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf```
+ ```docker run --rm  --name livepeer-orch -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch-orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf```
 
 ## Run The Standalone Transcoder!
 
- ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+ ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
 # Monitoring Livepeer
 
- ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935  -d -v /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+ ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935  -d -v /home/livepeer/orch-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
-  ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /path/to/store/livepeer-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+  ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
 # Reference Documentation
 
