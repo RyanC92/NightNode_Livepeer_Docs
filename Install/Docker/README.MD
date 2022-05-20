@@ -104,7 +104,6 @@ systemctl restart docker
 
 #  STEP 4: Install NVIDIA Container Runtime
 
-
 ## Verification Steps 
 
 In order to have a smooth transition to Livepeer on Docker, several key verification steps are needed. 
@@ -283,7 +282,7 @@ monitor
 v 6
 ```
 
-# Run The Orchestrator/Transcoder!
+## Run The Orchestrator/Transcoder!
 
 ``` docker run --rm --gpus all --name livepeer-orch-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf ```
 
@@ -299,7 +298,7 @@ v 6
 
 [livepeer_orchestrator.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_orchestrator.conf) 
 
-## Configure Standalon Transcoder 
+## Configure Standalone Transcoder 
 
 [livepeer_transcoder.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_transcoder.conf) 
 
@@ -312,9 +311,11 @@ v 6
 
  ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
-# Monitoring Livepeer
+# STEP 7: Prometheus Monitoring for Livepeer
 
  ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935  -d -v /home/livepeer/orch-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
+
+# STEP 8: Grafana Reporting for Livepeer Monitoring Livepeer
 
   ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
