@@ -29,7 +29,7 @@ https://livepeer.com/docs/guides
 
 Download the latest release located [Here](https://github.com/NightWolf92/NightNode_Livepeer_Docs/releases/tag/Latest)
 
-The Livepeer_Setup.exe file will prompt if you want to install this for yourself, or all users. (If you choose for yourself, it installs it into appData, all users would be ```C:\Livepeer\``` by default)
+The Livepeer_Setup.exe file will prompt if you want to install this for yourself, or all users. Livepeer will install to ```C:\Livepeer\``` by default
 
 The installer will install the files to the stated install directory, providing default templates, config files and launch batch files that would require minimal modification to get started. It will also download the latest livepeer release from https://github.com/livepeer/go-livepeer
 
