@@ -2,7 +2,7 @@
 
 :Restart 
 
-TITLE Livepeer Transcoder
+TITLE Transcoder - GPU ALL
 
 .\Binaries\livepeer.exe -config "livepeer_transcoder - GPU ALL.conf"
 
