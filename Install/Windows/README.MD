@@ -31,7 +31,7 @@ Note 2: Follow the config files guidance. The below configs will look similar to
 
 Download the latest release located [Here](https://github.com/NightWolf92/NightNode_Livepeer_Docs/releases/tag/Latest)
 
-The Livepeer_Setup.exe file will prompt if you want to install this for yourself, or all users. Livepeer will install to ```C:\Livepeer\``` by default
+The Livepeer_Setup.exe file will prompt if you want to install this for yourself, or all users. Livepeer will install to ```C:\Livepeer\``` by default.
 
 The installer will install the files to the stated install directory, providing default templates, config files and launch batch files that would require minimal modification to get started. It will also download the latest livepeer release from https://github.com/livepeer/go-livepeer
 
@@ -362,7 +362,7 @@ After grafana is installed navigate to ```localhost:3000``` to verify that grafa
 
 # Installation (Part 3: Prometheus)
 
-Included as well in the install for livepeer, the installer will go to prometheus and download the zip and extract it. The files get extracted to the install directory of Livepeer
+Included as well in the install for livepeer, the installer will go to prometheus and download the zip and extract it. The files get extracted to the install directory of Livepeer.
 
 The batch file within the livepeer installer folder is set to point to this. Please utilize the the ```prometheus.yml``` file located in the livepeer install folder. 
 
@@ -408,9 +408,9 @@ scrape_configs:
 
 # Running Livepeer, Grafana, Prometheus
 
-Now that you have modified the files necessary to run these programs (Livepeer .conf files, Prometheus.yml file)
+Now that you have modified the files necessary to run these programs (Livepeer .conf files, Prometheus.yml file).
 
-You can either run the individual launch batch files for Livepeer and Prometheus or run the ```LaunchScript.Bat``` file. *Please note, you may need to modify the batch file to point it to the specific launch files you want to run. For Example: ```Orchestrator.bat```,```Transcoder - GPU 1.bat``` and ```prometheus.bat```)*
+You can either run the individual launch batch files for Livepeer and Prometheus or run the ```LaunchScript.Bat``` file. *Please note, you may need to modify the batch file to point it to the specific launch files you want to run. For Example: ```Orchestrator.bat```,```Transcoder - GPU 1.bat``` and ```prometheus.bat```)*.
 
 ![image](https://user-images.githubusercontent.com/15055337/168826285-2aaa3738-39bb-407c-ae92-e82f115ee4cb.png)
 
