@@ -17,6 +17,7 @@
 - [Installation - Part 2 - Grafana](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-2-grafana)
 - [Installation - Part 3 - Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-3-prometheus)
 - [Running Livepeer, Grafana, Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#running-livepeer-grafana-prometheus)
+- [How to Uninstall]()
 - [Feedback](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#feedback)  
   
 # Installation (Part 1: Livepeer)
@@ -39,14 +40,16 @@ The installer will install the files to the stated install directory, providing 
 
 ### Windows
 
+What to do:
+
 Navigate to the install directory that was selected, by default it is ```"C:\Livepeer\"```. Inside the folder are a list of files that can be modified, please do so to fit your setup specifications.
 
 ```
 livepeer_orchestrator.conf (This will just run the O)
 livepeer_orchestratorcombo.conf (If you're going to run the O and the T Together in one window)
 livepeer_transcoder - GPU ALL.conf (Runs all GPUs for livepeer)
-livepeer_transcoder - GPU0.conf  (Runs just GPU0 - if you have 1 GPU, it starts at 0)
-livepeer_transcoder - GPU1.conf (Runs just GPU1 - This would be your second GPU)
+livepeer_transcoder - GPU 0.conf  (Runs just GPU 0 - if you have 1 GPU, it starts at 0)
+livepeer_transcoder - GPU 1.conf (Runs just GPU 1 - This would be your second GPU)
 ```
 
 Once you modify the files, there are corresponding batch files for each launcher. If you would like to simplify it, modify the ```LaunchScript.bat``` to include the batch files you would like to launch all at once and it will launch them together.
@@ -417,6 +420,12 @@ You can either run the individual launch batch files for Livepeer and Prometheus
 Grafana will launch automatically and run in the background as a service after the install is complete.
 
 You can connect to the interface by using ```localhost:3000``` in your browser to start. 
+
+# How to uninstall
+
+Located in the install directory is an uninstaller executable that will remove and delete all of the files within the install directory.
+
+You may also uninstall via "Add and remove programs".
 
 # Feedback
 
