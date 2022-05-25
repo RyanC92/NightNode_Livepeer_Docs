@@ -421,7 +421,7 @@ Grafana will launch automatically and run in the background as a service after t
 
 You can connect to the interface by using ```localhost:3000``` in your browser to start. 
 
-# How to uninstall
+# How to Uninstall
 
 Located in the install directory is an uninstaller executable that will remove and delete all of the files within the install directory.
 
