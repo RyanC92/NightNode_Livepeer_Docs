@@ -25,6 +25,8 @@ Note: Please Note this guide is not a one and done solutions, assumes the user h
 
 https://livepeer.com/docs/guides
 
+Note 2: Follow the config files guidance. The below configs will look similar to the text below, replace the field that are encapuslated with < text >, removing the brackets <> (See the #Arbitrum RPC ethURL for how it should look.) Also, remove the #'s which will uncomment the lines and make them applicable to the livepeer program. 
+
 ### Windows
 
 Download the latest release located [Here](https://github.com/NightWolf92/NightNode_Livepeer_Docs/releases/tag/Latest)
@@ -50,8 +52,6 @@ livepeer_transcoder - GPU1.conf (Runs just GPU1 - This would be your second GPU)
 Once you modify the files, there are corresponding batch files for each launcher. If you would like to simplify it, modify the ```LaunchScript.bat``` to include the batch files you would like to launch all at once and it will launch them together.
 
 # For Orchestrators
-
-Follow the config file guidance The below configs will look similar to the text below, replace the field that are encapuslated with < text >, removing the brackets <> (See the #Arbitrum RPC ethURL for how it should look.)
 
 ### livepeer_orchestrator.conf (For Standalone Orchestrators - No Transcoders connected)
 
@@ -410,11 +410,10 @@ scrape_configs:
 
 Now that you have modified the files necessary to run these programs (Livepeer .conf files, Prometheus.yml file)
 
-You can either run the individual launch batch files for Livepeer and Prometheus
+You can either run the individual launch batch files for Livepeer and Prometheus or run the ```LaunchScript.Bat``` file. *Please note, you may need to modify the batch file to point it to the specific launch files you want to run. For Example: ```Orchestrator.bat```,```Transcoder - GPU 1.bat``` and ```prometheus.bat```)*
 
 ![image](https://user-images.githubusercontent.com/15055337/168826285-2aaa3738-39bb-407c-ae92-e82f115ee4cb.png)
 
-or run the ```LaunchScript.Bat``` file. *Please note, you may need to modify the batch file to point it to the specific launch files you want to run. For Example: ```Orchestrator.bat```,```Transcoder - GPU 1.bat``` and ```prometheus.bat```)*
 Grafana will launch automatically and run in the background as a service after the install is complete.
 
 You can connect to the interface by using ```localhost:3000``` in your browser to start. 
