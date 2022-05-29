@@ -162,7 +162,7 @@ This detects the docker version. This value may not be exact. If it does not mat
 
 In this section, we will review the livepeer configuration file. I'd encourage you to review all the possible Livepeer configuration settings. For this guide, we will specifically configure 2 use cases:
 
-1. Single Container combined Orchestrator/Transcoder
+1. Single Container nd Orchestrator/Transcoder
 2. One Container for Standalone Orchestrator and One Container for Remote Transcoder
 
 ## Livepeer Configuration Prep
@@ -357,9 +357,9 @@ autoAdjustPrice false
 create a run_livepeer.sh and stop_livepeer.sh script
 
 ```
-touch /home/livepeer/combinded/run_livepeer.sh 
+touch /home/livepeer/combined/run_livepeer.sh 
 
-touch /home/livepeer/combinded/stop_livepeer.sh 
+touch /home/livepeer/combined/stop_livepeer.sh 
 ```
 
 Modify the run_livepeer.sh file and add the following:
@@ -379,7 +379,7 @@ Change ownership and permissions
 
 ```
 chown -Rf livepeer.docker /home/livepeer
-chmod a+x /home/livepeer/combinded/*.sh
+chmod a+x /home/livepeer/combined/*.sh
 
 ```
 
@@ -387,16 +387,16 @@ Run the run_livepeer.sh file
 
 ```
 sudo su - livepeer
-cd /home/livepeer/combinded/
+cd /home/livepeer/combined/
 ./run_livepeer.sh
 ```
 ### View container logs
 
-```docker logs combineded-orchestrator -f```
+```docker logs combined-orchestrator -f```
 
 ### Stop The container 
 
-```docker stop comdineded-orchestrator```
+```docker stop combined-orchestrator```
 
 ## Configure Standalone Orchestrator 
 
