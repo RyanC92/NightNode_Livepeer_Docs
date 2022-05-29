@@ -5,6 +5,9 @@
 * Protocol information can be found in the [protocol](https://github.com/livepeer/protocol) repo
 * Other project information can be found in the [wiki](https://github.com/livepeer/wiki/wiki)
 
+# About
+
+The following scripts, installers and documentation are meant to serve as a bridge between livepeer and the community, reducing the scale and scope in which a new user needs to learn the ins and outs of the platform and leaning out the process to which a user can get started running an orchestrator. This, however, is not a one click to run solution and requires general knowledge of the livepeer platform and its documentation and how livepeer itself runs with its dependancies on configuration files, prometheus and grafana. 
 
 # Installation 
 

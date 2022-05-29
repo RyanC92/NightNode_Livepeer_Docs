@@ -48,12 +48,11 @@ cliAddr <IP:PORT>
 orchSecret <string or path to secret file> #if you're using remote transcoders
 maxGasPrice 5000000000 #only processes transactions when its under .5 gwei
 pricePerUnit <900-1200 recommended>
-#blockPollingInterval 10
 nvidia all #<all,0,1,2,3 etc>
 maxSessions <#>
 monitor
 v 6
 
-#####################################
-#            End File               #
-#####################################
+#############################################
+#                  End File                 #
+#############################################

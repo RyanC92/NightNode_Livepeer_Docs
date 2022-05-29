@@ -2,8 +2,8 @@
 
 :Restart 
 
-TITLE Transcoder - 3080 TI
+TITLE Transcoder - GPU 1
 
-.\Binaries\Livepeer.exe -config "Livepeer_Transcoder - GPU2.conf"
+.\Binaries\Livepeer.exe -config "Livepeer_Transcoder - GPU1.conf"
 
 goto restart

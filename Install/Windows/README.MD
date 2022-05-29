@@ -17,6 +17,7 @@
 - [Installation - Part 2 - Grafana](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-2-grafana)
 - [Installation - Part 3 - Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#installation-part-3-prometheus)
 - [Running Livepeer, Grafana, Prometheus](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#running-livepeer-grafana-prometheus)
+- [How to Uninstall]()
 - [Feedback](https://github.com/NightWolf92/NightNode_Livepeer_Docs/tree/main/Install/Windows#feedback)  
   
 # Installation (Part 1: Livepeer)
@@ -25,11 +26,13 @@ Note: Please Note this guide is not a one and done solutions, assumes the user h
 
 https://livepeer.com/docs/guides
 
+Note 2: Follow the config files guidance. The below configs will look similar to the text below, replace the field that are encapuslated with < text >, removing the brackets <> (See the #Arbitrum RPC ethURL for how it should look.) Also, remove the #'s which will uncomment the lines and make them applicable to the livepeer program. 
+
 ### Windows
 
 Download the latest release located [Here](https://github.com/NightWolf92/NightNode_Livepeer_Docs/releases/tag/Latest)
 
-The Livepeer_Setup.exe file will prompt if you want to install this for yourself, or all users. (If you choose for yourself, it installs it into appData, all users would be ```C:\Livepeer\``` by default)
+The Livepeer_Setup.exe file will prompt if you want to install this for yourself, or all users. Livepeer will install to ```C:\Livepeer\``` by default.
 
 The installer will install the files to the stated install directory, providing default templates, config files and launch batch files that would require minimal modification to get started. It will also download the latest livepeer release from https://github.com/livepeer/go-livepeer
 
@@ -37,21 +40,21 @@ The installer will install the files to the stated install directory, providing 
 
 ### Windows
 
+What to do:
+
 Navigate to the install directory that was selected, by default it is ```"C:\Livepeer\"```. Inside the folder are a list of files that can be modified, please do so to fit your setup specifications.
 
 ```
 livepeer_orchestrator.conf (This will just run the O)
 livepeer_orchestratorcombo.conf (If you're going to run the O and the T Together in one window)
 livepeer_transcoder - GPU ALL.conf (Runs all GPUs for livepeer)
-livepeer_transcoder - GPU0.conf  (Runs just GPU0 - if you have 1 GPU, it starts at 0)
-livepeer_transcoder - GPU1.conf (Runs just GPU1 - This would be your second GPU)
+livepeer_transcoder - GPU 0.conf  (Runs just GPU 0 - if you have 1 GPU, it starts at 0)
+livepeer_transcoder - GPU 1.conf (Runs just GPU 1 - This would be your second GPU)
 ```
 
 Once you modify the files, there are corresponding batch files for each launcher. If you would like to simplify it, modify the ```LaunchScript.bat``` to include the batch files you would like to launch all at once and it will launch them together.
 
 # For Orchestrators
-
-Follow the config file guidance The below configs will look similar to the text below, replace the field that are encapuslated with < text >, removing the brackets <> (See the #Arbitrum RPC ethURL for how it should look.)
 
 ### livepeer_orchestrator.conf (For Standalone Orchestrators - No Transcoders connected)
 
@@ -362,7 +365,7 @@ After grafana is installed navigate to ```localhost:3000``` to verify that grafa
 
 # Installation (Part 3: Prometheus)
 
-Included as well in the install for livepeer, the installer will go to prometheus and download the zip and extract it. The files get extracted to the install directory of Livepeer
+Included as well in the install for livepeer, the installer will go to prometheus and download the zip and extract it. The files get extracted to the install directory of Livepeer.
 
 The batch file within the livepeer installer folder is set to point to this. Please utilize the the ```prometheus.yml``` file located in the livepeer install folder. 
 
@@ -408,16 +411,21 @@ scrape_configs:
 
 # Running Livepeer, Grafana, Prometheus
 
-Now that you have modified the files necessary to run these programs (Livepeer .conf files, Prometheus.yml file)
+Now that you have modified the files necessary to run these programs (Livepeer .conf files, Prometheus.yml file).
 
-You can either run the individual launch batch files for Livepeer and Prometheus
+You can either run the individual launch batch files for Livepeer and Prometheus or run the ```LaunchScript.Bat``` file. *Please note, you may need to modify the batch file to point it to the specific launch files you want to run. For Example: ```Orchestrator.bat```,```Transcoder - GPU 1.bat``` and ```prometheus.bat```)*.
 
 ![image](https://user-images.githubusercontent.com/15055337/168826285-2aaa3738-39bb-407c-ae92-e82f115ee4cb.png)
 
-or run the ```LaunchScript.Bat``` file. *Please note, you may need to modify the batch file to point it to the specific launch files you want to run. For Example: ```Orchestrator.bat```,```Transcoder - GPU 1.bat``` and ```prometheus.bat```)*
 Grafana will launch automatically and run in the background as a service after the install is complete.
 
 You can connect to the interface by using ```localhost:3000``` in your browser to start. 
+
+# How to Uninstall
+
+Located in the install directory is an uninstaller executable that will remove and delete all of the files within the install directory.
+
+You may also uninstall via "Add and remove programs".
 
 # Feedback
 
