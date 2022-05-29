@@ -29,8 +29,6 @@ This guide was developed using:
 
 Have access to an Arbitrum RPC URL. This is required to run Livepeer. You can use any RPC URL, but some of the commonly used services are Infura, Alchemy, or Self Hosted.
 
-TODO: need to put community arb node here????
-
 Lastly, You should be familiar with the Livepeer configuration, deployment, and running of an Orchestrator/Transcoder. I'd recommend reviewing the Linux and Windows installation guides prior to attempting to run Livepeer in Docker. 
 
 
@@ -169,55 +167,95 @@ In this section, we will review the livepeer configuration file. I'd encourage y
 
 ## Livepeer Configuration Prep
 
-All configuration for livepeer will be stored in one folder. The livepeer.conf file, ETH keystore/secret, and arbitrum files will stored in this configuration folder. 
+All configuration for livepeer will be stored in one folder. The livepeer.conf file, ETH keystore/secret, and arbitrum files will stored in this configuration folder, and the necessary files to run Grafana,Prometheus, and Nvidia GO Exporter. 
+
+The final folder structure will look like this:
+
+```
+/home/livepeer/
+ |-combined
+ |-docker_volumes
+ |---combined
+ |-----arbitrum-one-mainnet
+ |-------keystore
+ |---eth-acct-creation
+ |-----arbitrum-mainnet
+ |-------keystore
+ |---monitor
+ |-----grafana
+ |-----nvidia
+ |-----prometheus
+ |-------config
+ |-------data
+ |---standalone
+ |-----orch
+ |-------arbitrum-one-mainnet
+ |---------keystore
+ |-----trans
+ |-------offchain
+ |-monitor
+ |-standalone
+ |---orch
+ |---trans
+```
 
 *****PROTECT THESE FILES AND FOLDER!!!!*****
 
 *****THEY CONTAIN SENSTIVE INFO!!!*****
 
-First, create the configuration directory that will contain your livepeer files.
+First, create all the directories
 
-```mkdir -p /home/livepeer/orch/```
+```
+# Store the files to run Docker - Eth account creation
+mkdir -p /home/livepeer/eth-acct-creation/
 
-Create the eth_secret.txt file.
+# Store the files to run Docker Use Case 1
+mkdir -p /home/livepeer/combined/
 
-``` touch /home/livepeer/orch/eth_secret.txt```
+# Store the files to run Docker Use Case 2
+mkdir -p /home/livepeer/standalone/
 
-**make sure you modify this file and store your ETH account passphrase** 
+# Store the files to run Docker Monitoring (both use cases)
+mkdir -p /home/livepeer/monitor/
 
-This is the password I used:
-
-``` LivePeerEthSecret! ```
-
-Create the kestore and copy your ETH private key.
-
-```mkdir -p /home/livepeer/orch/arbitrum/keystore```
-
-- copy your ETH Json keyfile to keystore directory
-
-```cp key.json /home/livepeer/orch/arbitrum/keystore/```
+# Store all container data files after restarts.
+mkdir -p /home/livepeer/docker_volumes/eth-acct-creation/arbitrum-mainnet/keystore/
+mkdir -p /home/livepeer/docker_volumes/grafana
+mkdir -p /home/livepeer/docker_volumes/prometheus/config
+mkdir -p /home/livepeer/docker_volumes/prometheus/data
+mkdir -p /home/livepeer/docker_volumes/standalone/trans/offchain
+```
 
 ## Create a ETH Account via Livepeer
 
 Run this command to generate the ETH account JSON file.
 
-this step will prompt you 3 times. you are creating a new ETH account addr, keystore, and passphrase
+Please note: step will prompt you for a passphrase 3 times. Promt 1 & 2 are for your ETH account passphrase. The 3 prompt is for your keystore passphrase. 
 
-a file should be created /
+In this example I used: ```LivePeerRocks!``` For ALL 3 prompts. You should NOT do this in a production environment.
+
+Save the passphrase because they are needed for the Livepeer configuration.
+
+As the root user:
+```
+cd /home/livepeer/eth-acct-creation/
+touch create_eth_acct.sh
+chmod a+x create_eth_acct.sh
+```
+
+Edit the create_eth_acct.sh and put the following contents:
 
 ```
-mkdir livepeer-eth-acct
-
-cd livepeer-eth-acct
-
-docker run --rm -it -v $(pwd):/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true \
--orchSecret=LivePeerRocks! -network=arbitrum-mainnet -ethUrl=https://rpc.ankr.com/arbitrum \
--ethPassword=LivePeerRocks! -v=6
+docker run --rm -it -v /home/livepeer/docker_volumes/eth-acct-creation:/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true -orchSecret=LivePeerRocks! -network=arbitrum-one-mainnet -ethUrl=https://arb1.arbitrum.io/rpc -ethPassword=LivePeerRocks! -v=6
 ```
 
-It will attempt to start the Orchestrator. It will prompt you for the ETH Account Password (stored in eth_secret.txt). 
+As the root user - run this command to create the eth account and follow the steps to generate the account.
 
-In this example I used: ```LivePeerRocks!```
+```
+./create_eth_acct.sh
+
+```
+The output will look like this:
 
 ```
 I0513 13:38:36.198424       1 livepeer.go:274] ***Livepeer is running on the arbitrum-mainnet network***
@@ -238,16 +276,17 @@ E0513 13:38:52.050790       1 livepeer.go:510] Failed to set gas info on Livepee
 I0513 13:38:52.051839       1 db.go:382] Closing DB
 ```
 
+Verify the ETH account JSON was created.
 
+As the root user:
 ```
-chown -Rf livepeer.docker /home/livepeer
-ls arbitrum-mainnet/keystore/*
+ls /home/livepeer/docker_volumes/arbitrum-one-mainnet/keystore/*
 ```
 
 You will see output like this:
 
 ```
-arbitrum-mainnet/keystore/UTC--2022-05-13T13-38-48.305596618Z--1483c047d9fe54a26356b82fcac79209f4c793ec
+/home/livepeer/docker_volumes/arbitrum-one-mainnet/keystore/UTC--2022-05-13T13-38-48.305596618Z--1483c047d9fe54a26356b82fcac79209f4c793ec
 ```
 
 The file name starting with UTC--[DATE]--[ETH ACCOUNT ADDR]
@@ -256,7 +295,7 @@ The file name starting with UTC--[DATE]--[ETH ACCOUNT ADDR]
 1483c047d9fe54a26356b82fcac79209f4c793ec
 ```
 
-the ETH Account should be saved for your Livepeer configuration. 
+This will be the ETH Account saved for your Livepeer configuration. 
 
 The ETH Account will be as follows. 
 *Take note of the 0x that was appended to the front of the account.*
@@ -265,56 +304,99 @@ The ETH Account will be as follows.
 0x1483c047d9fe54a26356b82fcac79209f4c793ec
 ```
 
-neeed to copy the files to the right folder
+Copy the ETH account JSON file to the combined and standalone orchestrator docker_volume folders. We will be using this ETH account address for Use Case 1 and 2 Orchestrator configuration.
 
 ```
-cp /home/livepeer/orch/livepeer-eth-acct/arbitrum-mainnet/keystore/YOUR_UTC_FILE.json /home/livepeer/orch/arbitrum/keystore/
+cp /home/livepeer/docker_volumes/eth-acct-creation/arbitrum-mainnet/keystore/YOUR_UTC_FILE.json /home/livepeer/docker_volumes/combined/arbitrum-mainnet/keystore
 
-ls -al /home/livepeer/orch/*
+ls -al /home/livepeer/docker_volumes/combined/arbitrum-mainnet/keystore/*
+
+cp /home/livepeer/docker_volumes/eth-acct-creation/arbitrum-mainnet/keystore/YOUR_UTC_FILE.json /home/livepeer/docker_volumes/standalone/orch/arbitrum-mainnet/keystore
+
+ls -al /home/livepeer/docker_volumes/standalone/orch/arbitrum-mainnet/keystore/*
 ```
 
 #  STEP 5: Multiple Modes to Run Livepeer  
 
 ## Configure Combined Orchestrator/Transcoder
 
-Choose the template file that matches your Livepeer use case. 
+For our first use case, we will create the combined Orchestrator / Transcoder livepeer.conf file.
+```
+touch /home/livepeer/docker_volumes/combined/livepeer.conf
+```
 
-For our first use case, we will use the combined Orchestrator / Transcoder Template.
-
-Download [livepeer_orchestratorcombo.conf](https://github.com/NightWolf92/NightNode_Livepeer_Docs/blob/main/Install/Linux/livepeer_orchestratorcombo.conf) to use as a starting point.
-
-- rename the template file to *livepeer.conf*
-- modify the file to include your environment settings.
-
-These are the settings I used:
+modify the livepeer.conf and add the follow settings:
 
 ```
-orchestrator true
-transcoder true
-network arbitrum-one-mainnet
-ethUrl arb1.arbitrum.io/rpc
-ethPassword /root/.lpData/eth_secret.txt
-serviceAddr <IP:PORT>
-cliAddr <IP:PORT>
-maxGasPrice 5000000000
-pricePerUnit 900
-nvidia all
-maxSessions 10
-monitor
 v 6
+monitor true
+orchestrator true
+transcoder true 
+network arbitrum-one-mainnet
+ethUrl https://arb1.arbitrum.io/rpc
+ethPassword /root/.lpData/eth_secret.txt
+
+# Modify this to your ETH account. looks like: 0x5210d3c241ff6096cafbe673c303ee556b2af884
+ethAcctAddr <YOUR ETH ACCOUNT ADDRESS> 
+
+# Modify this for your server IP. I used 0.0.0.0
+cliAddr <YOUR SERVER IP>:7935
+
+# Modify this for your server IP. I used 0.0.0.0
+serviceAddr <YOUR SERVER IP>:8935
+
+orchSecret /root/.lpData/orch_secret.txt
+nvidia all
+pricePerUnit 900
+maxSessions 10
+autoAdjustPrice false
 ```
 
 ## Run The Orchestrator/Transcoder!
 
-``` docker run --rm --gpus all --name livepeer-orch-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf ```
+create a run_livepeer.sh and stop_livepeer.sh script
 
+```
+touch /home/livepeer/combinded/run_livepeer.sh 
+
+touch /home/livepeer/combinded/stop_livepeer.sh 
+```
+
+Modify the run_livepeer.sh file and add the following:
+
+```
+docker run --rm --gpus all --name combined-orchestrator --network livepeer -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/docker_volumes/combined/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/livepeer.conf
+```
+
+Modify the stop_livepeer.sh file and add the following:
+
+```
+docker stop combined-orchestrator
+
+```
+
+Change ownership and permissions
+
+```
+chown -Rf livepeer.docker /home/livepeer
+chmod a+x /home/livepeer/combinded/*.sh
+
+```
+
+Run the run_livepeer.sh file
+
+```
+sudo su - livepeer
+cd /home/livepeer/combinded/
+./run_livepeer.sh
+```
 ### View container logs
 
-```docker logs livepeer-orch-trans -f```
+```docker logs combineded-orchestrator -f```
 
 ### Stop The container 
 
-```docker stop livepeer-orch-trans```
+```docker stop comdineded-orchestrator```
 
 ## Configure Standalone Orchestrator 
 
@@ -342,8 +424,12 @@ v 6
   ```docker run --rm --gpus all --name livepeer-trans -p 8935:8935 -p 7935:7935 -d -v /home/livepeer/orch-trans/:/root/.lpData/ livepeer/go-livepeer:0.5.29  -config=/root/.lpData/livepeer.conf```
 
 # Reference Documentation
-- Livepeer.org
-- Discord
+- [Livepeer.org](https://livepeer.org)
+- [Monitoring Livepeer Forum](https://forum.livepeer.org/t/guide-transcoder-monitoring-with-prometheus-grafana/1225)
+  - Monitoring Example Files
+    - [Prometheus Config](https://github.com/0xVires/livepeer-grafana-monitoring/blob/main/prometheus.yml)
+    - [NVIDIA Exporter](https://raw.githubusercontent.com/0xVires/livepeer-grafana-monitoring/main/nvidia_exporter.go)
+    - [Grafana Dashboards](https://github.com/0xVires/livepeer-grafana-monitoring/tree/main/Dashboards)
 - NVIDIA Reference Links
   - [Docker Nividia Install](https://docs.nvidia.com/ai-enterprise/deployment-guide/dg-docker.html)
   - [Container Runtine Install](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
