@@ -307,14 +307,10 @@ transcoder true
 network arbitrum-one-mainnet
 ethUrl https://arb1.arbitrum.io/rpc
 ethPassword /root/.lpData/eth_secret.txt
-
 # Modify this to your ETH account. looks like: 0x5210d3c241ff6096cafbe673c303ee556b2af884
 ethAcctAddr <YOUR ETH ACCOUNT ADDRESS> 
 
-# Modify this for your server IP. I used 0.0.0.0
 cliAddr <YOUR SERVER IP>:7935
-
-# Modify this for your server IP. I used 0.0.0.0
 serviceAddr <YOUR SERVER IP>:8935
 
 orchSecret /root/.lpData/orch_secret.txt
@@ -326,58 +322,21 @@ autoAdjustPrice false
 
 ## Run The Orchestrator/Transcoder!
 
-create a run_livepeer.sh and stop_livepeer.sh script
-
-As the root user (or sudo), run the following:
-```
-touch /root/combined/run_livepeer.sh 
-
-touch /root/combined/stop_livepeer.sh 
-```
-
-Modify the run_livepeer.sh file and add the following:
-
 ```
 docker run --rm --gpus all --name combined-orchestrator --network livepeer -p 8935:8935 -p 7935:7935 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/combined-livepeer.conf
 ```
 
-Modify the stop_livepeer.sh file and add the following:
-
-```
-docker stop combined-orchestrator
-
-```
-
-Change ownership and permissions
-
-```
-chmod a+x /root/combined/*.sh
-
-```
-
-Run the run_livepeer.sh file
-
-As the root user (or sudo), run the following:
-```
-cd /root/combined/
-./run_livepeer.sh
-```
 ### View container logs
 
 As the root user (or sudo), run the following:
 
-```docker logs combined-orchestrator -f```
+```docker logs combined-orchestrator```
 
 ### Stop The container 
 
 As the root user (or sudo), run the following:
 ```
 docker stop combined-orchestrator
-
-#OR
-
-cd /root/combined/
-./stop_livepeer.sh
 ```
 
 ## Configure Standalone Orchestrator 
@@ -399,13 +358,9 @@ ethPassword /root/.lpData/eth_secret.txt
 
 # Modify this to your ETH account. looks like: 0x5210d3c241ff6096cafbe673c303ee556b2af884
 ethAcctAddr <YOUR ETH ACCOUNT ADDRESS> 
-
-# Modify this for your server IP. I used 0.0.0.0
-cliAddr <YOUR SERVER IP>:7935
-
-# Modify this for your server IP. I used 0.0.0.0
-serviceAddr <YOUR SERVER IP>:8935
-orchAddr <YOUR SERVER IP>:8935
+cliAddr <YOUR SERVER IP>:7936
+serviceAddr <YOUR SERVER IP>:8936
+orchAddr <YOUR SERVER IP>:8936
 
 orchSecret /root/.lpData/orch_secret.txt
 pricePerUnit 900
@@ -413,121 +368,105 @@ maxSessions 10
 autoAdjustPrice false
 ```
 
-create the run_livepeer.sh and stop_livepeer.sh scripts
+### RUN Standalone Orchestrator
 
-```
-touch /root/standalone/orch/run_livepeer.sh 
-touch /root/standalone/orch/stop_livepeer.sh 
-```
-
-Modify the run_livepeer.sh file and add the following:
-
+As the root user (or sudo), run the following:
 ```
 docker run --rm --name standalone-orchestrator --network livepeer -p 8936:8936 -p 7936:7936 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/standalone-orch-livepeer.conf
 ```
 
-Modify the stop_livepeer.sh file and add the following:
-
-```
-docker stop standalone-orchestrator
-```
-
-
-Change ownership and permissions
-
-As the root user (or sudo), run the following:
-```
-chmod a+x /root/standalone/orch/*.sh
-```
-Run the run_livepeer.sh file
-
-As the root user (or sudo), run the following:
-```
-cd /root/standalone/orch/
-./run_livepeer.sh
-```
-
 ### View container logs
 
 As the root user (or sudo), run the following:
-```docker logs standalone-orchestrator -f```
+```docker logs standalone-orchestrator```
 
 ### Stop The container 
+
+DO NOT STOP the container. This container needs to run so the standalone transcoder can connect. When you are done testing, then run the stop command.
 
 As the root user (or sudo), run the following:
 ```
 docker stop standalone-orchestrator
-
-#OR
-
-cd /root/standalone/orch/
-./stop_livepeer.sh
 ```
 
 ## Configure Standalone Transcoder 
 
-create a run_livepeer.sh and stop_livepeer.sh script
-
 ```
-touch /root/standalone/trans/run_livepeer.sh 
-touch /root/standalone/trans/stop_livepeer.sh 
+touch /root/docker_volumes/lpData/standalone-trans-livepeer.conf
 ```
 
-Modify the run_livepeer.sh file and add the following:
+modify the standalone-trans-livepeer.conf and add the follow settings:
 
 ```
-docker run --rm --name standalone-transcoder --network livepeer -p 8936:8936 -p 7936:7936 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/standalone-trans-livepeer.conf
+v 6
+monitor true
+transcoder true 
+cliAddr <YOUR SERVER IP>:7937
+orchAddr <YOUR SERVER IP>:8936
+orchSecret /root/.lpData/orch_secret.txt
+nvidia all
+maxSessions 10
 ```
 
-Modify the stop_livepeer.sh file and add the following:
 
-```
-docker stop standalone-transcoder
-```
-
-Change ownership and permissions
-
-As the root user (or sudo), run the following:
-```
-chmod a+x /root/standalone/trans/*.sh
-```
-
-Run the run_livepeer.sh file
+### RUN Standalone Transcoder
 
 As the root user (or sudo), run the following:
 ```
-cd /root/standalone/trans/
-./run_livepeer.sh
+docker run --rm --name standalone-transcoder --network livepeer -p 8937:8937 -p 7937:7937 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/standalone-trans-livepeer.conf
 ```
 
 ### View container logs
 
 As the root user (or sudo), run the following:
-```docker logs standalone-transcoder -f```
+```docker logs standalone-transcoder```
 
 ### Stop The container 
 
 As the root user (or sudo), run the following:
 ```
 docker stop standalone-transcoder
-
-#OR
-
-cd /root/standalone/trans/
-./stop_livepeer.sh
 ```
 
 # STEP 7: Prometheus Monitoring for Livepeer
+
+
+## Configure Prometheus
 
  ```
  
  ```
 
+### View container logs
+
+As the root user (or sudo), run the following:
+```docker logs prometheus```
+
+### Stop The container 
+
+As the root user (or sudo), run the following:
+```
+docker stop prometheus
+```
+
 # STEP 8: Grafana Reporting for Livepeer Monitoring Livepeer
+
+## Configure Grafana
 
   ```
   
   ```
+### View container logs
+
+As the root user (or sudo), run the following:
+```docker logs grafana```
+
+### Stop The container 
+
+As the root user (or sudo), run the following:
+```
+docker stop grafana
+```
 
 # Reference Documentation
 - [Livepeer.org](https://livepeer.org)
