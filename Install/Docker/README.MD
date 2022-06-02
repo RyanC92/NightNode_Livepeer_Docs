@@ -414,7 +414,6 @@ docker stop standalone-transcoder
 
 # STEP 7: Prometheus Monitoring for Livepeer
 
-
 ## Configure Prometheus
 
 ```
@@ -448,9 +447,8 @@ scrape_configs:
   - job_name: 'livepeer'
     metrics_path: /metrics
     static_configs:
-    - targets: ['standalone-coder:7937','standalone-orchestrator:7936','combined-orchestrator:7935']
+    - targets: ['standalone-transcoder:7937','standalone-orchestrator:7936','combined-orchestrator:7935']
 ```
-
 
 ### RUN Prometheus
 
@@ -473,6 +471,7 @@ docker stop prometheus
 
 # STEP 8: Grafana Reporting for Livepeer Monitoring Livepeer
 
+
 ## Run Grafana
 
   ```
@@ -482,6 +481,11 @@ docker stop prometheus
 
 As the root user (or sudo), run the following:
 ```docker logs grafana```
+
+
+Grafana is now up and running. Now you can import the dashboards from [Monitoring Example Files](#Monitoring+Example+Files).
+
+The dashboards will require you to setup a Prometheus datasource. [Grafana Reference Links](#Grafana+Reference+Links)
 
 ### Stop The container 
 
@@ -501,6 +505,9 @@ docker stop grafana
   - [Docker Nividia Install](https://docs.nvidia.com/ai-enterprise/deployment-guide/dg-docker.html)
   - [Container Runtine Install](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html)
 
+- Grafana Reference Links
+  - [Import Dashboards](https://grafana.com/docs/grafana/latest/dashboards/export-import/)
+  - [Create Datasource](https://prometheus.io/docs/visualization/grafana/)
 # Contact the Author
 ## Twitter @MikeZupper
 ## Discord mikezupper#2551
