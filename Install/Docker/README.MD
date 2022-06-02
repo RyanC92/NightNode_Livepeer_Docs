@@ -169,7 +169,6 @@ The final folder structure will look like this:
  |---orch
  |---trans
  |-combined
- |-eth-acct-creation
  |-docker_volumes
  |---lpData
  |-----arbitrum-one-mainnet
@@ -194,7 +193,8 @@ As the root user (or sudo), run the following:
 mkdir -p /root/combined/
 
 # Store the files to run Docker Use Case 2
-mkdir -p /root/standalone/
+mkdir -p /root/standalone/trans
+mkdir -p /root/standalone/orch
 
 # Store the files to run Docker Monitoring (both use cases)
 mkdir -p /root/monitor/
@@ -219,24 +219,9 @@ Save the passphrase because they are needed for the Livepeer configuration.
 
 As the root user (or sudo), run the following:
 ```
-cd /root/eth-acct-creation/
-touch create_eth_acct.sh
-chmod a+x create_eth_acct.sh
-```
-
-Modify the create_eth_acct.sh and paste the following contents:
-
-```
 docker run --rm -it -v /root/docker_volumes/lpData:/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true -orchSecret=LivePeerRocks! -network=arbitrum-one-mainnet -ethUrl=https://arb1.arbitrum.io/rpc -ethPassword=LivePeerRocks! -v=6
 ```
 
-Create the eth account and follow the steps to generate the account.
-
-As the root user (or sudo), run the following:
-```
-./create_eth_acct.sh
-
-```
 The output will look like this:
 
 ```
@@ -408,7 +393,6 @@ nvidia all
 maxSessions 10
 ```
 
-
 ### RUN Standalone Transcoder
 
 As the root user (or sudo), run the following:
@@ -433,8 +417,46 @@ docker stop standalone-transcoder
 
 ## Configure Prometheus
 
+```
+touch /root/docker_volumes/prometheus/config/prometheus.yml
+```
+
+modify the prometheus.yml and add the follow settings:
+
+```
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['prometheus:9090']
+  - job_name: 'gpu'
+    static_configs:
+    - targets: ['nvidia-go-exporter:9101']
+  - job_name: 'livepeer'
+    metrics_path: /metrics
+    static_configs:
+    - targets: ['standalone-coder:7937','standalone-orchestrator:7936','combined-orchestrator:7935']
+```
+
+
+### RUN Prometheus
+
  ```
- 
+ docker run --name prometheus --rm -d -p 9090:9090  -v /root/docker_volumes/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+
  ```
 
 ### View container logs
@@ -451,10 +473,10 @@ docker stop prometheus
 
 # STEP 8: Grafana Reporting for Livepeer Monitoring Livepeer
 
-## Configure Grafana
+## Run Grafana
 
   ```
-  
+  docker run -d --name=grafana --rm -v /root/docker_volumes/grafana:/var/lib/grafana -p 3000:3000 grafana/grafana
   ```
 ### View container logs
 
