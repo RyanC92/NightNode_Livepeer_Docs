@@ -65,7 +65,7 @@ As the root user (or sudo), run the following:
 ```
 apt-get update
 
-apt-get install docker-ce docker-ce-cli containerd.io
+apt-get install docker-ce docker-ce-cli containerd.io -y
 
 systemctl --now enable docker
 ```
