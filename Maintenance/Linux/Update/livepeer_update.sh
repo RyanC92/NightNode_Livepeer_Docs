@@ -18,7 +18,7 @@ apt-get update -y && apt-get install sudo  apt-transport-https software-properti
 wget -N https://github.com/livepeer/go-livepeer/releases/latest/download/livepeer-linux-amd64.tar.gz
 
 #Extract Livepeer
-"Extract livepeer from livepeer-linux-amd64.tar.gz"
+echo "Extract livepeer from livepeer-linux-amd64.tar.gz"
 tar -xvzf livepeer-linux-amd64.tar.gz
 
 
