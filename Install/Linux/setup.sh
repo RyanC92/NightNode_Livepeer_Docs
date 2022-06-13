@@ -12,7 +12,7 @@ apt-get update -y && apt-get install sudo  apt-transport-https software-properti
 
 #Download Prometheus, grafana and necessary dependencies
 
-wget -N https://github.com/prometheus/prometheus/releases/download/v2.33.0/prometheus-2.33.0.linux-amd64.tar.gz
+wget -N https://github.com/prometheus/prometheus/releases/download/v2.36.1/prometheus-2.36.1.linux-amd64.tar.gz
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Prometheus/prometheus.yml
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer.service
 wget -N https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/orchestrator.target
@@ -30,20 +30,26 @@ wget -N -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/
 wget -N -P livepeer/ https://github.com/NightWolf92/NightNode_Livepeer_Docs/raw/main/Install/Linux/livepeer_orchestratorcombo.conf
 
 #rename old livepeer and prometheus folders in /usr/local/bin to .bak incase they exist
+if [ -d "/etc/livepeer/" ]; then
+echo "Backing up Livepeer"
 mv /etc/livepeer /etc/livepeer.bak
+fi
+if [ -d "/etc/prometheus/" ]; then
+echo "Backing up Prometheus"
 mv /etc/prometheus /etc/prometheus.bak
+fi 
 
 #relocate livepeer and service files to their directories
 echo "relocating livepeer and service files"
 
 sudo mv livepeer/ /etc/
-sudo mv livepeer.service prometheus.service orchestrator.target livepeerOTsplit.service /etc/systemd/system/
+sudo mv livepeer.service prometheus.service livepeerOTsplit.service /etc/systemd/system/
 
 
 #Prometheus Setup 
-tar -xvzf prometheus-2.33.0.linux-amd64.tar.gz
+tar -xvzf prometheus-2.36.1.linux-amd64.tar.gz
 # this is to rename it if you want.
-mv prometheus-2.32.1.linux-amd64 prometheus
+mv prometheus-2.36.1.linux-amd64 prometheus
 
 #Create Prometheus/livepeer user account, copy the yml file and take ownership.
 sudo groupadd prometheus
