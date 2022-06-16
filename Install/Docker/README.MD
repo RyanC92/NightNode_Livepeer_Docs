@@ -96,9 +96,10 @@ wget https://raw.githubusercontent.com/keylase/nvidia-patch/master/patch.sh
 chmod a+x ./patch.sh
 ./patch.sh
 
-wget https://raw.githubusercontent.com/keylase/nvidia-patch/master/patch-fbc.sh
-chmod a+x ./patch-fbc.sh
-./patch-fbc.sh
+
+Disable autoupdates 
+***COMMAND NEEDED***
+
 
 ```
 
@@ -153,7 +154,7 @@ This detects the docker version. This value may not be exact. If it does not mat
 
 In this section, we will review the livepeer configuration file. I'd encourage you to review all the possible Livepeer configuration settings. For this guide, we will specifically configure 2 use cases:
 
-1. Single Container nd Orchestrator/Transcoder
+1. Single Container and Orchestrator/Transcoder
 2. One Container for Standalone Orchestrator and One Container for Remote Transcoder
 
 ## Livepeer Configuration Prep
@@ -185,22 +186,8 @@ The final folder structure will look like this:
 
 *****THEY CONTAIN SENSTIVE INFO!!!*****
 
-First, create all the directories
-
-As the root user (or sudo), run the following:
-```
-# Store the files to run Docker Use Case 1
-mkdir -p /root/combined/
-
-# Store the files to run Docker Use Case 2
-mkdir -p /root/standalone/trans
-mkdir -p /root/standalone/orch
-
-# Store the files to run Docker Monitoring (both use cases)
-mkdir -p /root/monitor/
-
 # Store all container data files after restarts.
-mkdir -p /root/docker_volumes/lpData/arbitrum-mainnet/keystore/
+mkdir -p /root/docker_volumes/lpData/arbitrum-one-mainnet/keystore/
 mkdir -p /root/docker_volumes/lpData/offchain/
 mkdir -p /root/docker_volumes/grafana
 mkdir -p /root/docker_volumes/prometheus/config
@@ -219,7 +206,7 @@ Save the passphrase because they are needed for the Livepeer configuration.
 
 As the root user (or sudo), run the following:
 ```
-docker run --rm -it -v /root/docker_volumes/lpData:/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true -orchSecret=LivePeerRocks! -network=arbitrum-one-mainnet -ethUrl=https://arb1.arbitrum.io/rpc -ethPassword=LivePeerRocks! -v=6
+docker run --rm -it -v /root/docker_volumes/lpData:/root/.lpData/ livepeer/go-livepeer:0.5.32 -orchestrator=true -orchSecret=LivePeerRocks! -network=arbitrum-one-mainnet -ethUrl=https://arb1.arbitrum.io/rpc -ethPassword=LivePeerRocks! -v=6
 ```
 
 The output will look like this:
@@ -273,7 +260,7 @@ The ETH Account will be as follows.
 
 We will be using this ETH account address for Use Case 1 and 2 Orchestrator configuration.
 
-#  STEP 5: Multiple Modes to Run Livepeer  
+#  STEP 6: Multiple Modes to Run Livepeer  
 
 ## Configure Combined Orchestrator/Transcoder
 
@@ -304,6 +291,7 @@ pricePerUnit 900
 maxSessions 10
 autoAdjustPrice false
 ```
+Add and modify orch_secret.txt and eth_secret.txt files to the /root/.lpdata/ directory.
 
 ## Run The Orchestrator/Transcoder!
 
