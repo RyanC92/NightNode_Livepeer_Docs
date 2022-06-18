@@ -95,10 +95,12 @@ As the root user (or sudo), run the following:
 wget https://raw.githubusercontent.com/keylase/nvidia-patch/master/patch.sh
 chmod a+x ./patch.sh
 ./patch.sh
+```
 
-Disable autoupdates 
-***COMMAND NEEDED***
-
+Disable NVIDIA auto updates
+```
+apt-mark hold nvidia-driver-510      
+apt-mark hold nvidia-cuda-dev
 ```
 
 #  STEP 4: Install NVIDIA Container Runtime
