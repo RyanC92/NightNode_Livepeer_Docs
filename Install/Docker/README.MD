@@ -96,9 +96,8 @@ wget https://raw.githubusercontent.com/keylase/nvidia-patch/master/patch.sh
 chmod a+x ./patch.sh
 ./patch.sh
 
-wget https://raw.githubusercontent.com/keylase/nvidia-patch/master/patch-fbc.sh
-chmod a+x ./patch-fbc.sh
-./patch-fbc.sh
+Disable autoupdates 
+***COMMAND NEEDED***
 
 ```
 
@@ -153,7 +152,7 @@ This detects the docker version. This value may not be exact. If it does not mat
 
 In this section, we will review the livepeer configuration file. I'd encourage you to review all the possible Livepeer configuration settings. For this guide, we will specifically configure 2 use cases:
 
-1. Single Container nd Orchestrator/Transcoder
+1. Single Container and Orchestrator/Transcoder
 2. One Container for Standalone Orchestrator and One Container for Remote Transcoder
 
 ## Livepeer Configuration Prep
@@ -189,23 +188,17 @@ First, create all the directories
 
 As the root user (or sudo), run the following:
 ```
-# Store the files to run Docker Use Case 1
-mkdir -p /root/combined/
-
-# Store the files to run Docker Use Case 2
-mkdir -p /root/standalone/trans
-mkdir -p /root/standalone/orch
-
-# Store the files to run Docker Monitoring (both use cases)
-mkdir -p /root/monitor/
 
 # Store all container data files after restarts.
-mkdir -p /root/docker_volumes/lpData/arbitrum-mainnet/keystore/
+mkdir -p /root/docker_volumes/lpData/arbitrum-one-mainnet/keystore/
 mkdir -p /root/docker_volumes/lpData/offchain/
 mkdir -p /root/docker_volumes/grafana
 mkdir -p /root/docker_volumes/prometheus/config
 mkdir -p /root/docker_volumes/prometheus/data
 ```
+Create a network for Livepeer
+
+```docker network create livepeer```
 
 ## Create a ETH Account via Livepeer
 
@@ -219,7 +212,7 @@ Save the passphrase because they are needed for the Livepeer configuration.
 
 As the root user (or sudo), run the following:
 ```
-docker run --rm -it -v /root/docker_volumes/lpData:/root/.lpData/ livepeer/go-livepeer:0.5.29 -orchestrator=true -orchSecret=LivePeerRocks! -network=arbitrum-one-mainnet -ethUrl=https://arb1.arbitrum.io/rpc -ethPassword=LivePeerRocks! -v=6
+docker run --rm -it -v /root/docker_volumes/lpData:/root/.lpData/ livepeer/go-livepeer:0.5.32 -orchestrator=true -orchSecret=LivePeerRocks! -network=arbitrum-one-mainnet -ethUrl=https://arb1.arbitrum.io/rpc -ethPassword=LivePeerRocks! -v=6
 ```
 
 The output will look like this:
@@ -273,7 +266,7 @@ The ETH Account will be as follows.
 
 We will be using this ETH account address for Use Case 1 and 2 Orchestrator configuration.
 
-#  STEP 5: Multiple Modes to Run Livepeer  
+#  STEP 6: Multiple Modes to Run Livepeer  
 
 ## Configure Combined Orchestrator/Transcoder
 
@@ -295,7 +288,7 @@ ethPassword /root/.lpData/eth_secret.txt
 # Modify this to your ETH account. looks like: 0x5210d3c241ff6096cafbe673c303ee556b2af884
 ethAcctAddr <YOUR ETH ACCOUNT ADDRESS> 
 
-cliAddr <YOUR SERVER IP>:7935
+cliAddr combined-orchestrator:7935
 serviceAddr <YOUR SERVER IP>:8935
 
 orchSecret /root/.lpData/orch_secret.txt
@@ -308,7 +301,7 @@ autoAdjustPrice false
 ## Run The Orchestrator/Transcoder!
 
 ```
-docker run --rm --gpus all --name combined-orchestrator --network livepeer -p 8935:8935 -p 7935:7935 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/combined-livepeer.conf
+docker run --rm --gpus all --name combined-orchestrator --network livepeer -p 8935:8935 -p 7935:7935 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/combined-livepeer.conf
 ```
 
 ### View container logs
@@ -317,12 +310,23 @@ As the root user (or sudo), run the following:
 
 ```docker logs combined-orchestrator```
 
+### View the Livepeer CLI
+
+As the root user (or sudo), run the following:
+
+```docker exec -it combined-livepeer /bin/bash```
+
+Then in the container run:
+
+```livepeer_cli -http 7935 -host combined-livepeer```
+
 ### Stop The container 
 
 As the root user (or sudo), run the following:
 ```
 docker stop combined-orchestrator
 ```
+Add and modify orch_secret.txt and eth_secret.txt files to the /root/.lpdata/ directory.
 
 ## Configure Standalone Orchestrator 
 
@@ -343,7 +347,7 @@ ethPassword /root/.lpData/eth_secret.txt
 
 # Modify this to your ETH account. looks like: 0x5210d3c241ff6096cafbe673c303ee556b2af884
 ethAcctAddr <YOUR ETH ACCOUNT ADDRESS> 
-cliAddr <YOUR SERVER IP>:7936
+cliAddr standalone-orchestrator:7936
 serviceAddr <YOUR SERVER IP>:8936
 orchAddr <YOUR SERVER IP>:8936
 
@@ -357,13 +361,23 @@ autoAdjustPrice false
 
 As the root user (or sudo), run the following:
 ```
-docker run --rm --name standalone-orchestrator --network livepeer -p 8936:8936 -p 7936:7936 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/standalone-orch-livepeer.conf
+docker run --rm --name standalone-orchestrator --network livepeer -p 8936:8936 -p 7936:7936 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/standalone-orch-livepeer.conf
 ```
 
 ### View container logs
 
 As the root user (or sudo), run the following:
 ```docker logs standalone-orchestrator```
+
+### View the Livepeer CLI
+
+As the root user (or sudo), run the following:
+
+```docker exec -it standalone-orchestrator /bin/bash```
+
+Then in the container run:
+
+```livepeer_cli -http 7935 -host standalone-orchestrator```
 
 ### Stop The container 
 
@@ -373,6 +387,7 @@ As the root user (or sudo), run the following:
 ```
 docker stop standalone-orchestrator
 ```
+Add and modify orch_secret.txt and eth_secret.txt files to the /root/.lpdata/ directory.
 
 ## Configure Standalone Transcoder 
 
@@ -386,7 +401,7 @@ modify the standalone-trans-livepeer.conf and add the follow settings:
 v 6
 monitor true
 transcoder true 
-cliAddr <YOUR SERVER IP>:7937
+cliAddr standalone-transcoder:7937
 orchAddr <YOUR SERVER IP>:8936
 orchSecret /root/.lpData/orch_secret.txt
 nvidia all
@@ -397,7 +412,7 @@ maxSessions 10
 
 As the root user (or sudo), run the following:
 ```
-docker run --rm --name standalone-transcoder --network livepeer -p 8937:8937 -p 7937:7937 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/standalone-trans-livepeer.conf
+docker run --rm --name standalone-transcoder --network livepeer -p 8937:8937 -p 7937:7937 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/standalone-trans-livepeer.conf
 ```
 
 ### View container logs
