@@ -25,7 +25,7 @@ This guide was developed using:
 - NVIDIA-SMI 510.60.02
   - Driver Version: 510.60.02
   - CUDA Version: 11.6  
-- Livepeer 0.5.29
+- Livepeer 0.5.32
 - root user access (sudo is ok)
 
 Have access to an Arbitrum RPC URL. This is required to run Livepeer. You can use any RPC URL, but some of the commonly used services are Infura, Alchemy, or Self Hosted.
