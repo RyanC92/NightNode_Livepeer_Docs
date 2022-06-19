@@ -303,7 +303,7 @@ autoAdjustPrice false
 ## Run The Orchestrator/Transcoder!
 
 ```
-docker run --rm --gpus all --name combined-orchestrator --network livepeer -p 8935:8935 -p 7935:7935 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/combined-livepeer.conf
+docker run --restart unless-stopped --gpus all --name combined-orchestrator --network livepeer -p 8935:8935 -p 7935:7935 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/combined-livepeer.conf
 ```
 
 ### View container logs
@@ -363,7 +363,7 @@ autoAdjustPrice false
 
 As the root user (or sudo), run the following:
 ```
-docker run --rm --name standalone-orchestrator --network livepeer -p 8936:8936 -p 7936:7936 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/standalone-orch-livepeer.conf
+docker run --restart unless-stopped --name standalone-orchestrator --network livepeer -p 8936:8936 -p 7936:7936 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/standalone-orch-livepeer.conf
 ```
 
 ### View container logs
@@ -414,7 +414,7 @@ maxSessions 10
 
 As the root user (or sudo), run the following:
 ```
-docker run --rm --name standalone-transcoder --network livepeer -p 8937:8937 -p 7937:7937 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/standalone-trans-livepeer.conf
+docker run --restart unless-stopped --name standalone-transcoder --network livepeer -p 8937:8937 -p 7937:7937 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/standalone-trans-livepeer.conf
 ```
 
 ### View container logs
@@ -470,7 +470,7 @@ scrape_configs:
 ### RUN Prometheus
 
  ```
- docker run --name prometheus --rm -d -p 9090:9090  -v /root/docker_volumes/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+ docker run --name prometheus --restart unless-stopped --network livepeer -d -p 9090:9090  -v /root/docker_volumes/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 
  ```
 
