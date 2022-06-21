@@ -97,6 +97,7 @@ chmod a+x ./patch.sh
 ./patch.sh
 ```
 
+
 Disable NVIDIA auto updates
 ```
 apt-mark hold nvidia-driver-510      
@@ -185,6 +186,7 @@ The final folder structure will look like this:
 *****PROTECT THESE FILES AND FOLDER!!!!*****
 
 *****THEY CONTAIN SENSTIVE INFO!!!*****
+
 
 First, create all the directories
 
@@ -299,6 +301,7 @@ pricePerUnit 900
 maxSessions 10
 autoAdjustPrice false
 ```
+Add and modify orch_secret.txt and eth_secret.txt files to the /root/.lpdata/ directory.
 
 ## Run The Orchestrator/Transcoder!
 
