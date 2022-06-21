@@ -25,7 +25,7 @@ This guide was developed using:
 - NVIDIA-SMI 510.60.02
   - Driver Version: 510.60.02
   - CUDA Version: 11.6  
-- Livepeer 0.5.29
+- Livepeer 0.5.32
 - root user access (sudo is ok)
 
 Have access to an Arbitrum RPC URL. This is required to run Livepeer. You can use any RPC URL, but some of the commonly used services are Infura, Alchemy, or Self Hosted.
@@ -95,12 +95,13 @@ As the root user (or sudo), run the following:
 wget https://raw.githubusercontent.com/keylase/nvidia-patch/master/patch.sh
 chmod a+x ./patch.sh
 ./patch.sh
+```
 
 
-Disable autoupdates 
-***COMMAND NEEDED***
-
-
+Disable NVIDIA auto updates
+```
+apt-mark hold nvidia-driver-510      
+apt-mark hold nvidia-cuda-dev
 ```
 
 #  STEP 4: Install NVIDIA Container Runtime
@@ -186,6 +187,12 @@ The final folder structure will look like this:
 
 *****THEY CONTAIN SENSTIVE INFO!!!*****
 
+
+First, create all the directories
+
+As the root user (or sudo), run the following:
+```
+
 # Store all container data files after restarts.
 mkdir -p /root/docker_volumes/lpData/arbitrum-one-mainnet/keystore/
 mkdir -p /root/docker_volumes/lpData/offchain/
@@ -193,6 +200,9 @@ mkdir -p /root/docker_volumes/grafana
 mkdir -p /root/docker_volumes/prometheus/config
 mkdir -p /root/docker_volumes/prometheus/data
 ```
+Create a network for Livepeer
+
+```docker network create livepeer```
 
 ## Create a ETH Account via Livepeer
 
@@ -282,7 +292,7 @@ ethPassword /root/.lpData/eth_secret.txt
 # Modify this to your ETH account. looks like: 0x5210d3c241ff6096cafbe673c303ee556b2af884
 ethAcctAddr <YOUR ETH ACCOUNT ADDRESS> 
 
-cliAddr <YOUR SERVER IP>:7935
+cliAddr combined-orchestrator:7935
 serviceAddr <YOUR SERVER IP>:8935
 
 orchSecret /root/.lpData/orch_secret.txt
@@ -296,7 +306,7 @@ Add and modify orch_secret.txt and eth_secret.txt files to the /root/.lpdata/ di
 ## Run The Orchestrator/Transcoder!
 
 ```
-docker run --rm --gpus all --name combined-orchestrator --network livepeer -p 8935:8935 -p 7935:7935 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/combined-livepeer.conf
+docker run --restart unless-stopped --gpus all --name combined-orchestrator --network livepeer -p 8935:8935 -p 7935:7935 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/combined-livepeer.conf
 ```
 
 ### View container logs
@@ -305,12 +315,23 @@ As the root user (or sudo), run the following:
 
 ```docker logs combined-orchestrator```
 
+### View the Livepeer CLI
+
+As the root user (or sudo), run the following:
+
+```docker exec -it combined-livepeer /bin/bash```
+
+Then in the container run:
+
+```livepeer_cli -http 7935 -host combined-livepeer```
+
 ### Stop The container 
 
 As the root user (or sudo), run the following:
 ```
 docker stop combined-orchestrator
 ```
+Add and modify orch_secret.txt and eth_secret.txt files to the /root/.lpdata/ directory.
 
 ## Configure Standalone Orchestrator 
 
@@ -331,7 +352,7 @@ ethPassword /root/.lpData/eth_secret.txt
 
 # Modify this to your ETH account. looks like: 0x5210d3c241ff6096cafbe673c303ee556b2af884
 ethAcctAddr <YOUR ETH ACCOUNT ADDRESS> 
-cliAddr <YOUR SERVER IP>:7936
+cliAddr standalone-orchestrator:7936
 serviceAddr <YOUR SERVER IP>:8936
 orchAddr <YOUR SERVER IP>:8936
 
@@ -345,13 +366,23 @@ autoAdjustPrice false
 
 As the root user (or sudo), run the following:
 ```
-docker run --rm --name standalone-orchestrator --network livepeer -p 8936:8936 -p 7936:7936 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/standalone-orch-livepeer.conf
+docker run --restart unless-stopped --name standalone-orchestrator --network livepeer -p 8936:8936 -p 7936:7936 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/standalone-orch-livepeer.conf
 ```
 
 ### View container logs
 
 As the root user (or sudo), run the following:
 ```docker logs standalone-orchestrator```
+
+### View the Livepeer CLI
+
+As the root user (or sudo), run the following:
+
+```docker exec -it standalone-orchestrator /bin/bash```
+
+Then in the container run:
+
+```livepeer_cli -http 7935 -host standalone-orchestrator```
 
 ### Stop The container 
 
@@ -361,6 +392,7 @@ As the root user (or sudo), run the following:
 ```
 docker stop standalone-orchestrator
 ```
+Add and modify orch_secret.txt and eth_secret.txt files to the /root/.lpdata/ directory.
 
 ## Configure Standalone Transcoder 
 
@@ -374,7 +406,7 @@ modify the standalone-trans-livepeer.conf and add the follow settings:
 v 6
 monitor true
 transcoder true 
-cliAddr <YOUR SERVER IP>:7937
+cliAddr standalone-transcoder:7937
 orchAddr <YOUR SERVER IP>:8936
 orchSecret /root/.lpData/orch_secret.txt
 nvidia all
@@ -385,7 +417,7 @@ maxSessions 10
 
 As the root user (or sudo), run the following:
 ```
-docker run --rm --name standalone-transcoder --network livepeer -p 8937:8937 -p 7937:7937 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.29 -config=/root/.lpData/standalone-trans-livepeer.conf
+docker run --restart unless-stopped --name standalone-transcoder --network livepeer -p 8937:8937 -p 7937:7937 -d -v /root/docker_volumes/lpData/:/root/.lpData/ livepeer/go-livepeer:0.5.32 -config=/root/.lpData/standalone-trans-livepeer.conf
 ```
 
 ### View container logs
@@ -441,7 +473,7 @@ scrape_configs:
 ### RUN Prometheus
 
  ```
- docker run --name prometheus --rm -d -p 9090:9090  -v /root/docker_volumes/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
+ docker run --name prometheus --restart unless-stopped --network livepeer -d -p 9090:9090  -v /root/docker_volumes/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml prom/prometheus
 
  ```
 
